@@ -105,10 +105,11 @@ class GamePhaseController(InterfaceGamePhaseController):
 
     def _try_to_do_further_actions(self) -> None:
         first_unsuccesful_player: Optional[PlayerOrder] = None
+        unsuccesful_game_phase: Optional[GamePhase] = None
         while True:
             dispatcher: InterfaceGamePhaseState = self._dispatchers[self._game_phase]
             player: PlayerOrder = self._current_player_taking_reward or self._current_player
-            if self._game_phase != GamePhase.GAME_END and first_unsuccesful_player == player:
+            if (first_unsuccesful_player, unsuccesful_game_phase) == (player, self._game_phase):
                 self._progress_state_after_no_action_possible_by_any_player()
                 first_unsuccesful_player = None
                 continue
@@ -124,6 +125,7 @@ class GamePhaseController(InterfaceGamePhaseController):
                 case HasAction.NO_ACTION_POSSIBLE:
                     if first_unsuccesful_player is None:
                         first_unsuccesful_player = player
+                        unsuccesful_game_phase = self._game_phase
                     self._progress_state_after_no_action_possible()
                     continue
                 case _:
