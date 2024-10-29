@@ -1,0 +1,25 @@
+import unittest
+from stone_age.simple_types import Effect
+from stone_age.game_board.simple_building import SimpleBuilding
+
+class TestSimpleBuilding(unittest.TestCase):
+    def test_non_resource_use(self) -> None:
+        self.assertRaises(AssertionError, SimpleBuilding, [Effect.WOOD, Effect.FOOD])
+
+    def test_resources_used_once(self) -> None:
+        building = SimpleBuilding([Effect.WOOD, Effect.CLAY])
+        self.assertEqual(building.build([Effect.WOOD, Effect.CLAY]), 7)
+        self.assertIsNone(building.build([Effect.WOOD, Effect.CLAY, Effect.CLAY]))
+        self.assertIsNone(building.build([Effect.WOOD]))
+        self.assertIsNone(building.build([Effect.WOOD, Effect.GOLD]))
+
+    def test_resources_multiset(self) -> None:
+        building = SimpleBuilding([Effect.WOOD, Effect.WOOD, Effect.CLAY])
+        self.assertEqual(building.build([Effect.WOOD, Effect.WOOD, Effect.CLAY]), 10)
+        self.assertIsNone(building.build([Effect.WOOD, Effect.CLAY, Effect.CLAY]))
+        self.assertIsNone(building.build([Effect.WOOD, Effect.CLAY]))
+
+if __name__ == "__main__":
+    unittest.main()
+
+
