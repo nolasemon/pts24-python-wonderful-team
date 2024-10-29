@@ -1,5 +1,5 @@
 from __future__ import annotations
-from enum import Enum
+from enum import IntEnum, Enum
 
 
 class PlayerOrder:
@@ -51,7 +51,7 @@ class Location(Enum):
     BUILDING_TILE4 = 24
 
 
-class Effect(Enum):
+class Effect(IntEnum):
     FOOD = 1
     WOOD = 2
     CLAY = 3
