@@ -16,3 +16,7 @@ class SimpleBuilding(Building):
         if sorted(self._required_resources) != sorted(resources):
             return None
         return sum(Effect.points(x) for x in resources)
+
+    @property
+    def get_required_resources(self) -> list[Effect]:
+        return self._required_resources              # method for testing
