@@ -15,6 +15,7 @@ class Testing_Buildings(TestCase):
         self.assertIsNone(a.build([x for x in range(0, 5, -1)] + [Effect.CLAY]))
         self.assertEqual(a.build((Effect.CLAY, Effect.CLAY, Effect.CLAY, Effect.WOOD)), 15)
         self.assertIsNone(a.build((Effect.CLAY, Effect.CLAY, Effect.CLAY, Effect.GOLD)))
+        self.assertIsNone(a.build("Effect.WOOD Effect.WOOD Effect.WOOD".split(' ')))
 
         with self.assertRaises(TypeError):
             a.build(None)
@@ -38,11 +39,15 @@ class Testing_Buildings(TestCase):
             c.build(lambda z: z ** 0.5)
         with self.assertRaises(TypeError):
             c.build("Effect.WOOD")
-        with self.assertRaises(AssertionError):
-            c.build("Effect.WOOD Effect.WOOD Effect.WOOD".split(' '))
         with self.assertRaises(TypeError):
             c.build(bool(0))
         del c
+
+        with self.assertRaises(AssertionError):
+            d = SimpleBuilding("Effect.STONE Effect.GOLD Effect.WOOD".split(' '))
+        with self.assertRaises(AssertionError):
+            d = SimpleBuilding({c for c in range(0, 50, 5)})
+        del d
 
 
     def testing_ArbitratyBuilding(self) -> None:
@@ -66,8 +71,6 @@ class Testing_Buildings(TestCase):
             a.build(Effect.WOOD)
         with self.assertRaises(TypeError):
             a.build("Effect.WOOD")
-        with self.assertRaises(AssertionError):
-            a.build("Effect.STONE Effect.GOLD Effect.WOOD".split(' '))
         with self.assertRaises(TypeError):
             a.build(5 > 7)
         with self.assertRaises(TypeError):
