@@ -3,8 +3,9 @@ from collections import defaultdict
 from stone_age.interfaces import InterfaceGetState
 from stone_age.simple_types import EndOfGameEffect
 
+
 class PlayerCivilisationCards(InterfaceGetState):
-    
+
     def __init__(self) -> None:
         self._end_effect_cards: Dict[EndOfGameEffect, int] = defaultdict(int)
 
@@ -16,13 +17,13 @@ class PlayerCivilisationCards(InterfaceGetState):
         self, buildings: int, tools: int, fields: int, figures: int
     ) -> int:
         result_points = 0
-        
+
         for effect, count in self._end_effect_cards.items():
             match effect:
                 case EndOfGameEffect.FARMER:
                     result_points += count * fields
                 case EndOfGameEffect.TOOL_MAKER:
-                    result_points += count * tools  
+                    result_points += count * tools
                 case EndOfGameEffect.BUILDER:
                     result_points += count * buildings
                 case EndOfGameEffect.SHAMAN:
@@ -38,15 +39,16 @@ class PlayerCivilisationCards(InterfaceGetState):
             EndOfGameEffect.WEAVING,
             EndOfGameEffect.WRITING
         ]
-        
-        green_card_counts = [self._end_effect_cards[card] for card in green_cards]
-        
+
+        green_card_counts = [self._end_effect_cards[card]
+                             for card in green_cards]
+
         while any(count > 0 for count in green_card_counts):
             set_size = sum(1 for count in green_card_counts if count > 0)
             result_points += set_size * set_size
-            
-            for i in range(len(green_card_counts)):
-                if green_card_counts[i] > 0:
+
+            for i, count in enumerate(green_card_counts):
+                if count > 0:
                     green_card_counts[i] -= 1
 
         return result_points
