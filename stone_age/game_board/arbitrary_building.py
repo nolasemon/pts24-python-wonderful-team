@@ -4,7 +4,7 @@ from stone_age.game_board. interfaces import Building
 
 class ArbitraryBuilding(Building):
 
-    maxNumberOfResources: Optional[int] = None
+    maxNumberOfResources: int = 0
 
     def __init__(self, max_num_resources: int):
         assert isinstance(max_num_resources, int) and max_num_resources > 0
@@ -15,7 +15,7 @@ class ArbitraryBuilding(Building):
             return None
         if len(list(resources)) > self.maxNumberOfResources or len(list(resources)) < 1:
             return None
-        return sum((Effect.points(x) for x in resources))
+        return sum(Effect.points(x) for x in resources)
 
     @property
     def get_maxNumberOfResources(self) -> int:

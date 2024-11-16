@@ -4,11 +4,11 @@ from stone_age.game_board. interfaces import Building
 
 
 class SimpleBuilding(Building):
-    _required_resources: list[Effect]
+    _required_resources: Iterable[Effect]
 
     def __init__(self, resources: Iterable[Effect]):
         assert all(Effect.is_resource(x) for x in resources)
-        self._required_resources = list(resources)
+        self._required_resources = resources
 
     def build(self, resources: Iterable[Effect]) -> Optional[int]:
         if not all(Effect.is_resource(x) for x in resources):
@@ -18,5 +18,5 @@ class SimpleBuilding(Building):
         return sum(Effect.points(x) for x in resources)
 
     @property
-    def get_required_resources(self) -> list[Effect]:
+    def get_required_resources(self) -> Iterable[Effect]:
         return self._required_resources              # method for testing
