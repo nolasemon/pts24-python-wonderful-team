@@ -129,7 +129,8 @@ class CivilisationCard:
     _immediate_effects: list[ImmediateEffect]
     _end_of_game_effects: list[EndOfGameEffect]
 
-    def __init__(self, immediate_effects: list[ImmediateEffect], end_of_game_effects: list[EndOfGameEffect]):
+    def __init__(self, immediate_effects: list[ImmediateEffect],
+                 end_of_game_effects: list[EndOfGameEffect]):
         self._immediate_effects = immediate_effects
         self._end_of_game_effects = end_of_game_effects
 
