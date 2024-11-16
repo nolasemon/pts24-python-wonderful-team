@@ -33,3 +33,7 @@ class InterfaceGamePhaseController:
 
     def state(self) -> str:
         assert False
+
+class InterfaceGetState:
+    def get_state(self) -> str:
+        assert False
