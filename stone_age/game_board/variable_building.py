@@ -9,6 +9,7 @@ class VariableBuilding(Building):
 
     def __init__(self, number_resouces: int, distinct_types: int):
         assert isinstance(number_resouces, int) and isinstance(distinct_types, int)
+        assert 0 < distinct_types < 5
         self._numberOfResources = number_resouces
         self._numberOfResourceTypes = distinct_types
 
