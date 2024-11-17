@@ -84,7 +84,7 @@ class PlayerFiguresUnit(unittest.TestCase):
         self.assertTrue(p1.take_figures(4))
         self.assertEqual(p1.get_total_figures, 9)
 
-    def test_state_after_new_turn(self):
+    def test_state_after_new_turn(self) -> None:
         p1 = PlayerFigures()
 
         for _ in range(7):
@@ -101,7 +101,7 @@ class PlayerFiguresUnit(unittest.TestCase):
         p1.new_turn()
         self.assertEqual(p1.state(), "Actual figures count: 4,\nTotal figures: 7")
 
-    def test_negative_count(self):
+    def test_negative_count(self) -> None:
         p1 = PlayerFigures()
 
         # A player cannot take the negative number of figures
