@@ -14,7 +14,6 @@ class PlayerFiguresUnit(unittest.TestCase):
 
         # Player cannot add more figures
         self.assertFalse(p1.add_new_figure())
-        self.assertNotEquals(p1.get_total_figures, 11)
         self.assertEqual(p1.get_total_figures, 10)
 
     def test_take_more_figures(self) -> None:
@@ -70,12 +69,14 @@ class PlayerFiguresUnit(unittest.TestCase):
         self.assertEqual(total_count, 20)
 
     def test_place_figures(self) -> None:
+        """Placing figures on the game board does not influence
+         the overall number of figures for a player"""
+
         p1 = PlayerFigures()
 
         for _ in range(9):
             p1.add_new_figure()
 
-        # Placing figures on the game board does not influence the overall number of figures for a player
         self.assertTrue(p1.take_figures(5))
         self.assertEqual(p1.get_total_figures, 9)
         self.assertFalse(p1.take_figures(5))
