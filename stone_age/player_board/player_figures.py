@@ -19,7 +19,7 @@ class PlayerFigures:
         return self._total_figures
 
     def take_figures(self, count: int) -> bool:
-        if self._figures >= count:
+        if count > 0 and self.has_figures(count):
             self._figures -= count
             return True
         return False
