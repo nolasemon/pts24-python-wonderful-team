@@ -24,9 +24,9 @@ class VariableBuilding(Building):
         return sum(Effect.points(x) for x in resources)
 
     @property
-    def get_numberOfResources(self) -> int:
+    def get_number_of_resources(self) -> int:
         return self._numberOfResources                # method for testing
 
     @property
-    def get_numberOfResourcesTypes(self) -> int:
+    def get_number_of_resources_types(self) -> int:
         return self._numberOfResourcesTypes           #method for testing

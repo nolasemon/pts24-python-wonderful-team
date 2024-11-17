@@ -18,5 +18,5 @@ class ArbitraryBuilding(Building):
         return sum(Effect.points(x) for x in resources)
 
     @property
-    def get_maxNumberOfResources(self) -> int:
+    def get_max_number_of_resources(self) -> int:
         return self.maxNumberOfResources               #method for testing

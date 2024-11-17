@@ -33,7 +33,7 @@ class Testing_Buildings(unittest.TestCase):
     def testing_ArbitratyBuilding(self) -> None:
 
         a = ArbitraryBuilding(6)
-        self.assertEqual(a.get_maxNumberOfResources, 6)
+        self.assertEqual(a.get_max_number_of_resources, 6)
         self.assertIsNone(a.build(Effect.GOLD for x in range(7)))
         self.assertIsNone(a.build(set()))
         self.assertEqual(a.build([Effect.CLAY, Effect.CLAY,Effect.STONE, Effect.CLAY, Effect.WOOD, Effect.GOLD]), 26)
@@ -48,18 +48,18 @@ class Testing_Buildings(unittest.TestCase):
         c = ArbitraryBuilding(4)
         self.assertEqual(c.build([Effect.GOLD, Effect.STONE, Effect.CLAY, Effect.WOOD]), 18)
         self.assertIsNone(c.build([Effect.GOLD, Effect.GOLD, Effect.GOLD, Effect.GOLD, Effect.GOLD]))
-        self.assertEqual(c.get_maxNumberOfResources, 4)
+        self.assertEqual(c.get_max_number_of_resources, 4)
         c = ArbitraryBuilding(7)
         self.assertEqual(c.build([Effect.CLAY] * 7), 28)
         self.assertNotIn(c.build([Effect.GOLD] * 7), [x for x in range(35, 55) if x != 42])
-        self.assertEqual(c.get_maxNumberOfResources, 7)
+        self.assertEqual(c.get_max_number_of_resources, 7)
         del c
 
     def testing_VariableBuilding(self) -> None:
 
         a = VariableBuilding(6, 2)
-        self.assertEqual(a.get_numberOfResourcesTypes, 2)
-        self.assertEqual(a.get_numberOfResources, 6)
+        self.assertEqual(a.get_number_of_resources_types, 2)
+        self.assertEqual(a.get_number_of_resources, 6)
         self.assertIsNone(a.build(Effect.GOLD for x in range(6)))
         self.assertIsNone(a.build([Effect.GOLD for x in range(6)] + [Effect.CLAY]))
         self.assertEqual(a.build([Effect.GOLD for x in range(5)] + [Effect.CLAY]), 34)
@@ -67,15 +67,15 @@ class Testing_Buildings(unittest.TestCase):
         del a
 
         b = VariableBuilding(5, 3)
-        self.assertEqual(b.get_numberOfResourcesTypes, 3)
-        self.assertEqual(b.get_numberOfResources, 5)
+        self.assertEqual(b.get_number_of_resources_types, 3)
+        self.assertEqual(b.get_number_of_resources, 5)
         with self.assertRaises(AssertionError):
             b = VariableBuilding(20, 0)
         with self.assertRaises(AssertionError):
             b = VariableBuilding(5, 5)
         c = VariableBuilding(3, 3)
-        self.assertEqual(c.get_numberOfResourcesTypes, 3)
-        self.assertEqual(c.get_numberOfResources, 5)
+        self.assertEqual(c.get_number_of_resources_types, 3)
+        self.assertEqual(c.get_number_of_resources, 3)
         self.assertIsNone(c.build([Effect.CLAY, Effect.WOOD, Effect.GOLD, Effect.GOLD]))
         self.assertIsNone(c.build([Effect.CLAY, Effect.GOLD, Effect.GOLD]))
         self.assertEqual(c.build([Effect.WOOD, Effect.CLAY, Effect.STONE]), 12)
