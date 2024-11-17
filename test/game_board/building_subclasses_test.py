@@ -4,7 +4,7 @@ from stone_age.game_board.arbitrary_building import ArbitraryBuilding
 import unittest
 from stone_age.simple_types import Effect
 
-class Testing_Buildings(unittest.TestCase):
+class TestingBuildings(unittest.TestCase):
 
     def testing_SimpleBuilding(self) -> None:
 
@@ -43,7 +43,7 @@ class Testing_Buildings(unittest.TestCase):
         self.assertEqual(a.build([Effect.STONE, Effect.GOLD, Effect.WOOD, Effect.CLAY]), 18)
 
         with self.assertRaises(AssertionError):
-            b = ArbitraryBuilding(-1)
+            ArbitraryBuilding(-1)
 
         c = ArbitraryBuilding(4)
         self.assertEqual(c.build([Effect.GOLD, Effect.STONE, Effect.CLAY, Effect.WOOD]), 18)

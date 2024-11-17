@@ -10,8 +10,9 @@ class VariableBuilding(Building):
     def __init__(self, number_resouces: int, distinct_types: int):
         assert isinstance(number_resouces, int) and isinstance(distinct_types, int)
         assert 0 < distinct_types < 5
+        self._numberOfResourcesTypes = distinct_types
         self._numberOfResources = number_resouces
-        self._numberOfResourceTypes = distinct_types
+
 
 
     def build(self, resources: Iterable[Effect]) -> Optional[int]:
@@ -19,7 +20,7 @@ class VariableBuilding(Building):
             return None
         if len(list(resources)) != self._numberOfResources:
             return None
-        if len(set(resources)) != self._numberOfResourceTypes:
+        if len(set(resources)) != self._numberOfResourcesTypes:
             return None
         return sum(Effect.points(x) for x in resources)
 
