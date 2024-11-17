@@ -48,7 +48,7 @@ class PlayerFiguresUnit(unittest.TestCase):
         self.assertEqual(p2.get_total_figures, 8)
         self.assertTrue(p1.take_figures(1))
         self.assertTrue(p2.take_figures(4))
-        self.assertIn("Actual figures count: 3", p2.state())
+        self.assertIn("Actual figures count: 4", p2.state())
         self.assertIn("Actual figures count: 9", p1.state())
 
     def test_run_out_of_figures(self) -> None:
