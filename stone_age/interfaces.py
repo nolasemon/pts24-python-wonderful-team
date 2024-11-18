@@ -98,4 +98,3 @@ class InterfacePlayerBoardGameBoard:
 
     def use_tool(self, idx: int) -> Optional[int]:
         assert isinstance(idx, int)
-        return None

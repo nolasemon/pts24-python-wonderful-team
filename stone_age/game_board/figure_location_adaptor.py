@@ -1,6 +1,4 @@
-from stone_age.simple_types import PlayerOrder
 from stone_age.interfaces import InterfaceFigureLocation
-from stone_age.game_board.simple_types import Player
 from stone_age.game_board.interfaces import InterfaceFigureLocationInternal
 
 
@@ -13,7 +11,5 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
         self._interface_figure_location_internal = interface_figure_location_internal
 
     @property
-    def interface_figure_location_internal(self):
+    def interface_figure_location_internal(self) -> InterfaceFigureLocationInternal:
         return self._interface_figure_location_internal
-
-
