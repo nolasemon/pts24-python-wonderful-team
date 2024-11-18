@@ -34,7 +34,8 @@ class ToolMakerHutFields:
         return self._restriction
 
     def can_place_at_all(self) -> bool:
-        """With 2 and 3 players, only 2 of these locations may be occupied during a round: tool maker, hut, and field"""
+        """With 2 and 3 players, only 2 of these locations may be occupied during a round:
+           tool maker, hut, and field"""
         if self.restriction == 4:
             return True
         is_tool_maker_occupied: bool = not self.tool_maker_figures
@@ -113,8 +114,9 @@ class ToolMakerHutFields:
             return False
         return True
 
-    def new_turn(self):
-        """When all actions are done, figures are taken back on player boards, so locations must be clear"""
+    def new_turn(self) -> None:
+        """When all actions are done, figures are taken back on player boards,
+           so locations must be clear"""
         self.tool_maker_figures.clear()
         self.hut_figures.clear()
         self.fields_figures.clear()
@@ -122,9 +124,12 @@ class ToolMakerHutFields:
 
     def state(self) -> str:
         state: Any = {
-            "tool maker figures": "None" if len(self.tool_maker_figures) == 0 else str(self.tool_maker_figures[0]),
-            "hut figures": "None" if len(self.hut_figures) == 0 else str(self.hut_figures[0]),
-            "fields figures": "None" if len(self.fields_figures) == 0 else str(self._fields_figures[0]),
+            "tool maker figures": "None" if len(self.tool_maker_figures) == 0
+            else str(self.tool_maker_figures[0]),
+            "hut figures": "None" if len(self.hut_figures) == 0
+            else str(self.hut_figures[0]),
+            "fields figures": "None" if len(self.fields_figures) == 0
+            else str(self._fields_figures[0]),
             "restriction": self.restriction
         }
         return json.dumps(state)
