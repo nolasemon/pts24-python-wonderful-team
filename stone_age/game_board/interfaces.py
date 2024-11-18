@@ -1,5 +1,5 @@
 # pylint: disable=unused-argument, duplicate-code
-from typing import Iterable, Optional, List
+from typing import Iterable, Optional
 from stone_age.simple_types import Effect, HasAction, ActionResult
 from stone_age.game_board.simple_types import Player
 
@@ -31,7 +31,7 @@ class InterfaceFigureLocationInternal:
         assert isinstance(player, Player)
         return False
 
-    def try_to_make_action(player: Player) -> HasAction:
+    def try_to_make_action(self, player: Player) -> HasAction:
         assert isinstance(player, Player)
         return HasAction.NO_ACTION_POSSIBLE
 

@@ -54,9 +54,8 @@ class ToolMakerHutFields:
             return False
         if self.tool_maker_figures[0] != player.player_order:
             return False
-        player.player_board.give_effect(Effect.TOOL)
+        player.player_board.give_effect([Effect.TOOL])
         return True
-
 
     def can_place_on_tool_maker(self, player: Player) -> bool:
         assert isinstance(player, Player)
@@ -102,7 +101,7 @@ class ToolMakerHutFields:
             return False
         if self.fields_figures[0] != player.player_order:
             return False
-        player.player_board.give_effect(Effect.FIELD)
+        player.player_board.give_effect([Effect.FIELD])
         return True
 
     def can_place_on_fields(self, player: Player) -> bool:
@@ -119,7 +118,6 @@ class ToolMakerHutFields:
         self.tool_maker_figures.clear()
         self.hut_figures.clear()
         self.fields_figures.clear()
-
 
     def state(self) -> str:
         state: Any = {

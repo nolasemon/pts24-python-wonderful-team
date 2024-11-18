@@ -7,7 +7,8 @@ class Player:
     _player_board: InterfacePlayerBoardGameBoard
 
     def __init__(self, player_order: PlayerOrder, player_board: InterfacePlayerBoardGameBoard):
-        assert isinstance(player_order, PlayerOrder) and isinstance(player_board, InterfacePlayerBoardGameBoard)
+        assert isinstance(player_order, PlayerOrder)
+        assert isinstance(player_board, InterfacePlayerBoardGameBoard)
         self._player_order = player_order
         self._player_board = player_board
 
