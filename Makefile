@@ -1,3 +1,5 @@
+all: check_and_test lint format
+
 check_and_test: FORCE
 	mypy stone_age --strict
 	mypy test --strict

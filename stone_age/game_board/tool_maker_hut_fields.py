@@ -1,8 +1,7 @@
+import json
 from typing import List, Any
 from stone_age.game_board.simple_types import Player
 from stone_age.simple_types import PlayerOrder, Effect
-import json
-
 
 class ToolMakerHutFields:
     _tool_maker_figures: List[PlayerOrder]
@@ -12,9 +11,9 @@ class ToolMakerHutFields:
 
     def __init__(self, player_count: int):
         assert isinstance(player_count, int) and 2 <= player_count <= 4
-        self._tool_maker_figures: List[PlayerOrder] = list()
-        self._hut_figures: List[PlayerOrder] = list()
-        self._fields_figures: List[PlayerOrder] = list()
+        self._tool_maker_figures: List[PlayerOrder] = []
+        self._hut_figures: List[PlayerOrder] = []
+        self._fields_figures: List[PlayerOrder] = []
         self._restriction = player_count
 
     @property
