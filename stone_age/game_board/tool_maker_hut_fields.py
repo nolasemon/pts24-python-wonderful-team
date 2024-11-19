@@ -3,6 +3,7 @@ from typing import List, Any
 from stone_age.game_board.simple_types import Player
 from stone_age.simple_types import PlayerOrder, Effect
 
+
 class ToolMakerHutFields:
     _tool_maker_figures: List[PlayerOrder]
     _hut_figures: List[PlayerOrder]
@@ -37,9 +38,9 @@ class ToolMakerHutFields:
            tool maker, hut, and field"""
         if self.restriction == 4:
             return True
-        is_tool_maker_occupied: bool = not self.tool_maker_figures
-        is_hut_occupied: bool = not self.hut_figures
-        is_fields_occupied: bool = not self.fields_figures
+        is_tool_maker_occupied: bool = len(self.tool_maker_figures) > 0
+        is_hut_occupied: bool = len(self.hut_figures) > 0
+        is_fields_occupied: bool = len(self.fields_figures) > 0
         return (int(is_tool_maker_occupied) + int(is_hut_occupied) + int(is_fields_occupied)) < 2
 
     def place_on_tool_maker(self, player: Player) -> bool:
@@ -66,7 +67,7 @@ class ToolMakerHutFields:
         return True
 
     def place_on_hut(self, player: Player) -> bool:
-        if not self.can_place_on_tool_maker(player):
+        if not self.can_place_on_hut(player):
             return False
         self.hut_figures.append(player.player_order)
         self.hut_figures.append(player.player_order)
