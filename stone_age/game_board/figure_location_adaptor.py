@@ -1,4 +1,4 @@
-from typing import Dict, Iterable, cast
+from typing import Dict, Iterable
 from stone_age.simple_types import PlayerOrder, HasAction, ActionResult, Effect
 from stone_age.interfaces import InterfaceFigureLocation, InterfacePlayerBoardGameBoard
 from stone_age.game_board.simple_types import Player
@@ -28,7 +28,8 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
         if player_order not in self.dict_player_order_to_player:
             self.dict_player_order_to_player[player_order] =\
                 Player(player_order, InterfacePlayerBoardGameBoard())
-        return cast(Player, self.dict_player_order_to_player[player_order])
+        assert isinstance(self.dict_player_order_to_player[player_order], Player)
+        return self.dict_player_order_to_player[player_order]
 
     def place_figures(self, player: PlayerOrder, figure_count: int) -> bool:
         assert isinstance(player, PlayerOrder) and figure_count > 0
