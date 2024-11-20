@@ -62,7 +62,8 @@ class TestPlaceFiguresState(unittest.TestCase):
             Location.HUT: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
             Location.QUARY: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
             Location.CIVILISATION_CARD1: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
-            Location.BUILDING_TILE1: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE)
+            Location.BUILDING_TILE1: LocationMock(
+                try_response=HasAction.NO_ACTION_POSSIBLE)
         }
         player = PlayerOrder(1, 1)
         place_figures_state = PlaceFiguresState(places)
@@ -74,7 +75,8 @@ class TestPlaceFiguresState(unittest.TestCase):
             Location.HUT: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
             Location.QUARY: LocationMock(try_response=HasAction.WAITING_FOR_PLAYER_ACTION),
             Location.CIVILISATION_CARD1: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
-            Location.BUILDING_TILE1: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE)
+            Location.BUILDING_TILE1: LocationMock(
+                try_response=HasAction.NO_ACTION_POSSIBLE)
         }
         player = PlayerOrder(1, 1)
         place_figures_state = PlaceFiguresState(places)
@@ -85,8 +87,10 @@ class TestPlaceFiguresState(unittest.TestCase):
         places = {
             Location.HUT: LocationMock(try_response=HasAction.WAITING_FOR_PLAYER_ACTION),
             Location.QUARY: LocationMock(try_response=HasAction.WAITING_FOR_PLAYER_ACTION),
-            Location.CIVILISATION_CARD1: LocationMock(try_response=HasAction.WAITING_FOR_PLAYER_ACTION),
-            Location.BUILDING_TILE1: LocationMock(try_response=HasAction.WAITING_FOR_PLAYER_ACTION)
+            Location.CIVILISATION_CARD1: LocationMock(
+                try_response=HasAction.WAITING_FOR_PLAYER_ACTION),
+            Location.BUILDING_TILE1: LocationMock(
+                try_response=HasAction.WAITING_FOR_PLAYER_ACTION)
         }
         player = PlayerOrder(1, 1)
         place_figures_state = PlaceFiguresState(places)

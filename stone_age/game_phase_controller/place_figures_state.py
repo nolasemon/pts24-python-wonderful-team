@@ -19,6 +19,7 @@ class PlaceFiguresState(InterfaceGamePhaseState):
 
     def try_to_make_automatic_action(self, player: PlayerOrder) -> HasAction:
         for place in self._places:
-            if self._places[place].try_to_place_figures(player, 1) == HasAction.WAITING_FOR_PLAYER_ACTION:
+            if (self._places[place].try_to_place_figures(player, 1)
+                    == HasAction.WAITING_FOR_PLAYER_ACTION):
                 return HasAction.WAITING_FOR_PLAYER_ACTION
         return HasAction.NO_ACTION_POSSIBLE
