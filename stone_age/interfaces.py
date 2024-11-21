@@ -54,7 +54,8 @@ class InterfaceFigureLocation:
     def make_action(self, player: PlayerOrder, input_resources: Iterable[Effect],
                     output_resources: Iterable[Effect]) -> ActionResult:
         assert isinstance(player, PlayerOrder)
-        assert isinstance(input_resources, Iterable) and isinstance(output_resources, Iterable)
+        assert isinstance(input_resources, Iterable) and isinstance(
+            output_resources, Iterable)
         return ActionResult.FAILURE
 
     def skip_action(self, player: PlayerOrder) -> bool:
