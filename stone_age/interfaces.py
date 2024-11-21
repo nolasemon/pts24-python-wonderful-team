@@ -94,13 +94,13 @@ class InterfaceNewTurn:
 
 
 class InterfaceToolUse:
-    def use_tool(self, player: PlayerOrder, idx: int) -> bool:
+    def use_tool(self, idx: int) -> bool:
         assert False
 
-    def can_use_tools(self, player: PlayerOrder) -> bool:
+    def can_use_tools(self) -> bool:
         assert False
 
-    def finish_using_tools(self, player: PlayerOrder) -> bool:
+    def finish_using_tools(self) -> bool:
         assert False
 
 
