@@ -42,7 +42,6 @@ class InterfaceGetState:
 
 
 class InterfaceFigureLocation:
-
     def place_figures(self, player: PlayerOrder, figure_count: int) -> bool:
         assert False
 
@@ -64,7 +63,6 @@ class InterfaceFigureLocation:
 
 
 class InterfacePlayerBoardGameBoard:
-
     def give_effect(self, stuff: Iterable[Effect]) -> None:
         assert False
 
@@ -96,14 +94,13 @@ class InterfaceNewTurn:
 
 
 class InterfaceToolUse:
-
-    def use_tool(self, idx: int) -> bool:
+    def use_tool(self, player: PlayerOrder, idx: int) -> bool:
         assert False
 
-    def can_use_tools(self) -> bool:
+    def can_use_tools(self, player: PlayerOrder) -> bool:
         assert False
 
-    def finish_using_tools(self) -> bool:
+    def finish_using_tools(self, player: PlayerOrder) -> bool:
         assert False
 
 
@@ -130,7 +127,6 @@ class InterfaceFeedTribe:
 
 
 class InterfaceStoneAgeGame:
-
     def place_figures(self, player_id: int, location: Location, figures_count: int) -> bool:
         assert False
 
