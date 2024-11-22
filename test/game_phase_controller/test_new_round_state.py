@@ -21,7 +21,7 @@ class NewTurnFake(InterfaceNewTurn):
         pass
 
 
-class TestMakeActionState(unittest.TestCase):
+class TestNewRoundState(unittest.TestCase):
     def test_no_game_end(self) -> None:
         places: Mapping[Location, LocationMock] = {
             Location.HUT: LocationMock(False),
