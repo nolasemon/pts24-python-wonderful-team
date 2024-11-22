@@ -27,8 +27,9 @@ class PlaceOnToolMakerAdaptor(InterfaceFigureLocationInternal):
             return HasAction.NO_ACTION_POSSIBLE
         if not self._tool_maker.can_place_on_tool_maker(player):
             return HasAction.NO_ACTION_POSSIBLE
-        return HasAction.AUTOMATIC_ACTION_DONE
+        return HasAction.WAITING_FOR_PLAYER_ACTION
 
     def new_turn(self) -> bool:
         """It is no way, that the tool maker location implies end of the game"""
+        self._tool_maker.new_turn()
         return False

@@ -10,10 +10,11 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
     _interface_figure_location_internal: InterfaceFigureLocationInternal
     _dict_player_order_to_player: Dict[PlayerOrder, Player]
 
-    def __init__(self, internal: InterfaceFigureLocationInternal):
+    def __init__(self, internal: InterfaceFigureLocationInternal,
+                 dict_player_order_to_player: Dict[PlayerOrder, Player]):
         assert isinstance(internal, InterfaceFigureLocationInternal)
         self._interface_figure_location_internal: InterfaceFigureLocationInternal = internal
-        self._dict_player_order_to_player: Dict[PlayerOrder, Player] = {}
+        self._dict_player_order_to_player: Dict[PlayerOrder, Player] = dict_player_order_to_player
 
     @property
     def interface_figure_location_internal(self) -> InterfaceFigureLocationInternal:

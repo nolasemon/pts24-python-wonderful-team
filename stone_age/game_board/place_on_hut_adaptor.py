@@ -27,8 +27,9 @@ class PlaceOnHutAdaptor(InterfaceFigureLocationInternal):
             return HasAction.NO_ACTION_POSSIBLE
         if not self._hut.can_place_on_hut(player):
             return HasAction.NO_ACTION_POSSIBLE
-        return HasAction.AUTOMATIC_ACTION_DONE
+        return HasAction.WAITING_FOR_PLAYER_ACTION
 
     def new_turn(self) -> bool:
         """It is no way, that the hut location implies end of the game"""
+        self._hut.new_turn()
         return False
