@@ -1,11 +1,13 @@
 from __future__ import annotations
+
 from typing import Mapping
-from stone_age.game_phase_controller.interfaces import InterfaceGamePhaseState
+
+from stone_age.game_phase_controller.interfaces import GamePhaseStateFailureMeta
 from stone_age.interfaces import InterfaceFigureLocation
 from stone_age.simple_types import Location, PlayerOrder, ActionResult, HasAction
 
 
-class PlaceFiguresState(InterfaceGamePhaseState):
+class PlaceFiguresState(GamePhaseStateFailureMeta):
     _places: Mapping[Location, InterfaceFigureLocation]
 
     def __init__(self, places: Mapping[Location, InterfaceFigureLocation]):
@@ -25,8 +27,12 @@ class PlaceFiguresState(InterfaceGamePhaseState):
         doing self._places[place].try_to_place_figures methods for each location).
         """
         for place in self._places:
-            if (self._places[place].try_to_place_figures(player, 1)
-                    == HasAction.WAITING_FOR_PLAYER_ACTION):
+            if place == Location.HUT:
+                if (self._places[place].try_to_place_figures(player, 2)
+                        == HasAction.WAITING_FOR_PLAYER_ACTION):
+                    return HasAction.WAITING_FOR_PLAYER_ACTION
+            elif (self._places[place].try_to_place_figures(player, 1)
+                  == HasAction.WAITING_FOR_PLAYER_ACTION):
                 return HasAction.WAITING_FOR_PLAYER_ACTION
         return HasAction.NO_ACTION_POSSIBLE
 

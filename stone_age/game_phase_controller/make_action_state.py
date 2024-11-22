@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import Iterable, Mapping
 
-from stone_age.game_phase_controller.interfaces import InterfaceGamePhaseState
+from stone_age.game_phase_controller.interfaces import GamePhaseStateFailureMeta
 from stone_age.interfaces import InterfaceFigureLocation
 from stone_age.simple_types import PlayerOrder, Location, Effect, ActionResult, HasAction
 
 
-class MakeActionState(InterfaceGamePhaseState):
+class MakeActionState(GamePhaseStateFailureMeta):
     _places: Mapping[Location, InterfaceFigureLocation]
 
     def __init__(self, places: Mapping[Location, InterfaceFigureLocation]):
@@ -26,7 +26,7 @@ class MakeActionState(InterfaceGamePhaseState):
 
     def try_to_make_automatic_action(self, player: PlayerOrder) -> HasAction:
         """If automatic action can be done, self._places[place].try_to_make_action
-        should do it, otherwise returns whether there are some figures on gameboard
+        should do it, otherwise returns whether there are some figures on player board
         waiting for player to make action."""
         waiting: bool = False
         for place in self._places:
