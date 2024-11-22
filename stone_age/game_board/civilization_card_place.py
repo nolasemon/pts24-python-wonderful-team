@@ -1,10 +1,9 @@
 from typing import List, Dict, Optional, Any
 
-from stone_age.game_board.interfaces import EvaluateCivilizationCardImmediateEffect
 from stone_age.simple_types import PlayerOrder, Effect
 
 
-class CivilizationCardPlace(EvaluateCivilizationCardImmediateEffect):
+class CivilizationCardPlace:
     def __init__(self, required_resources: int):
         self._required_resources = required_resources
         self._figures: List[PlayerOrder] = []
