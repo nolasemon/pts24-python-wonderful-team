@@ -118,3 +118,14 @@ class TestMakeActionState(unittest.TestCase):
         make_action_state = MakeActionState(places)
         self.assertEqual(HasAction.AUTOMATIC_ACTION_DONE,
                          make_action_state.try_to_make_automatic_action(player))
+
+    def test_wrong_method_called(self) -> None:
+        places: Mapping[Location, LocationMock] = {
+            Location.HUT: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
+            Location.FIELD: LocationMock(try_response=HasAction.NO_ACTION_POSSIBLE),
+            Location.QUARY: LocationMock(try_response=HasAction.AUTOMATIC_ACTION_DONE),
+        }
+        player = PlayerOrder(1, 1)
+        make_action_state = MakeActionState(places)
+        self.assertEqual(ActionResult.FAILURE,
+                         make_action_state.no_more_tools_this_throw(player))
