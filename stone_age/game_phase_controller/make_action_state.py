@@ -26,7 +26,7 @@ class MakeActionState(InterfaceGamePhaseState):
 
     def try_to_make_automatic_action(self, player: PlayerOrder) -> HasAction:
         """If automatic action can be done, self._places[place].try_to_make_action
-        should do it, otherwise returns whether there are some figures on gameboard
+        should do it, otherwise returns whether there are some figures on player board
         waiting for player to make action."""
         waiting: bool = False
         for place in self._places:
@@ -39,3 +39,22 @@ class MakeActionState(InterfaceGamePhaseState):
         return HasAction.WAITING_FOR_PLAYER_ACTION if waiting else HasAction.NO_ACTION_POSSIBLE
 
     # other actions should not be done in this phase
+    def place_figures(self, player: PlayerOrder, location: Location,
+                      figures_count: int) -> ActionResult:
+        return ActionResult.FAILURE
+
+    def use_tools(self, player: PlayerOrder, tool_index: int) -> ActionResult:
+        return ActionResult.FAILURE
+
+    def no_more_tools_this_throw(self, player: PlayerOrder) -> ActionResult:
+        return ActionResult.FAILURE
+
+    def feed_tribe(self, player: PlayerOrder, resources: Iterable[Effect]) -> ActionResult:
+        return ActionResult.FAILURE
+
+    def do_not_feed_this_turn(self, player: PlayerOrder) -> ActionResult:
+        return ActionResult.FAILURE
+
+    def make_all_players_take_a_reward_choice(self, player: PlayerOrder,
+                                              reward: Effect) -> ActionResult:
+        return ActionResult.FAILURE
