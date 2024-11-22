@@ -9,5 +9,6 @@ class Throw:
 
     def throw(self, dices: int) -> List[int]:
         assert isinstance(dices, int) and dices > 0
-        results: List[int] = [randint(self.minNumber, self.maxNumber) for dice in range(dices)]
+        results: List[int] = [
+            randint(self.minNumber, self.maxNumber) for dice in range(dices)]
         return results
