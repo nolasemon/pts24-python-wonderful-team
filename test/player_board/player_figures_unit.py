@@ -93,13 +93,17 @@ class PlayerFiguresUnit(unittest.TestCase):
         # The number of available figures changes only when there is no figure on the player board
         self.assertEqual(p1.get_total_figures, 7)
         self.assertTrue(p1.take_figures(7))
-        self.assertEqual(p1.state(), "Actual figures count: 0,\nTotal figures: 7")
+        self.assertEqual(
+            p1.state(), "Actual figures count: 0,\nTotal figures: 7")
         p1.new_turn()
-        self.assertEqual(p1.state(), "Actual figures count: 7,\nTotal figures: 7")
+        self.assertEqual(
+            p1.state(), "Actual figures count: 7,\nTotal figures: 7")
         p1.take_figures(3)
-        self.assertEqual(p1.state(), "Actual figures count: 4,\nTotal figures: 7")
+        self.assertEqual(
+            p1.state(), "Actual figures count: 4,\nTotal figures: 7")
         p1.new_turn()
-        self.assertEqual(p1.state(), "Actual figures count: 4,\nTotal figures: 7")
+        self.assertEqual(
+            p1.state(), "Actual figures count: 4,\nTotal figures: 7")
 
     def test_negative_count(self) -> None:
         p1 = PlayerFigures()
