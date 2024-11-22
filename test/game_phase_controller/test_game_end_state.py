@@ -1,7 +1,7 @@
 import unittest
 
 from stone_age.game_phase_controller.game_end_state import GameEndState
-from stone_age.simple_types import PlayerOrder, HasAction
+from stone_age.simple_types import PlayerOrder, HasAction, ActionResult
 
 
 class TestGameEndState(unittest.TestCase):
@@ -9,5 +9,8 @@ class TestGameEndState(unittest.TestCase):
         player = PlayerOrder(1, 1)
         self.assertEqual(HasAction.WAITING_FOR_PLAYER_ACTION,
                          GameEndState().try_to_make_automatic_action(player))
-        self.assertRaises(
-            AssertionError, GameEndState().do_not_feed_this_turn, player)
+
+    def test_wrong_method_call(self) -> None:
+        player = PlayerOrder(1, 1)
+        self.assertEqual(ActionResult.FAILURE,
+                         GameEndState().do_not_feed_this_turn(player))
