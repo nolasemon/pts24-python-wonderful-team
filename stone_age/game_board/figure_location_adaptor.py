@@ -28,7 +28,8 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
         if player_order not in self.dict_player_order_to_player:
             self.dict_player_order_to_player[player_order] =\
                 Player(player_order, InterfacePlayerBoardGameBoard())
-        assert isinstance(self.dict_player_order_to_player[player_order], Player)
+        assert isinstance(
+            self.dict_player_order_to_player[player_order], Player)
         return self.dict_player_order_to_player[player_order]
 
     def place_figures(self, player: PlayerOrder, figure_count: int) -> bool:
@@ -46,11 +47,14 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
     def make_action(self, player: PlayerOrder, input_resources: Iterable[Effect],
                     output_resources: Iterable[Effect]) -> ActionResult:
         assert isinstance(player, PlayerOrder)
-        assert all(isinstance(input_resource, Effect) for input_resource in input_resources)
-        assert all(isinstance(output_resource, Effect) for output_resource in output_resources)
+        assert all(isinstance(input_resource, Effect)
+                   for input_resource in input_resources)
+        assert all(isinstance(output_resource, Effect)
+                   for output_resource in output_resources)
         assert self.player_by_order(player) is not None
         return self.interface_figure_location_internal.\
-            make_action(self.player_by_order(player), input_resources, output_resources)
+            make_action(self.player_by_order(player),
+                        input_resources, output_resources)
 
     def skip_action(self, player: PlayerOrder) -> bool:
         assert isinstance(player, PlayerOrder)

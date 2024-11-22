@@ -1,6 +1,6 @@
 # pylint: disable=unused-argument, duplicate-code
 from typing import Iterable, Optional
-from stone_age.simple_types import Effect, HasAction, ActionResult
+from stone_age.simple_types import Effect, HasAction, ActionResult, PlayerOrder
 from stone_age.game_board.simple_types import Player
 
 
@@ -24,7 +24,8 @@ class InterfaceFigureLocationInternal:
     def make_action(self, player: Player, input_resources: Iterable[Effect],
                     output_resources: Iterable[Effect]) -> ActionResult:
         assert isinstance(player, Player)
-        assert isinstance(input_resources, Iterable) and isinstance(output_resources, Iterable)
+        assert isinstance(input_resources, Iterable) and isinstance(
+            output_resources, Iterable)
         return ActionResult.FAILURE
 
     def skip_action(self, player: Player) -> bool:
@@ -36,4 +37,12 @@ class InterfaceFigureLocationInternal:
         return HasAction.NO_ACTION_POSSIBLE
 
     def new_turn(self) -> bool:
+        return False
+
+
+class EvaluateCivilizationCardImmediateEffect:
+    def perform_effect(self, player: PlayerOrder, choice: Effect) -> bool:
+        assert isinstance(
+            player, PlayerOrder), "player must be a PlayerOrder object."
+        assert isinstance(choice, Effect), "choice must be an Effect object."
         return False

@@ -3,6 +3,7 @@ from typing import List, Any
 from stone_age.game_board.simple_types import Player
 from stone_age.simple_types import PlayerOrder, Effect
 
+
 class ToolMakerHutFields:
     _tool_maker_figures: List[PlayerOrder]
     _hut_figures: List[PlayerOrder]
