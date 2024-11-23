@@ -37,53 +37,57 @@ class TestFeedTribeState(unittest.TestCase):
         player = PlayerOrder(1,1)
         resources: Iterable[Effect] = []
         mock_failure = FeedMock()
-        dict_player_interface1: Dict[PlayerOrder, FeedMock] = Dict(player=mock_failure)
-        feed_tribe_state = FeedTribeState(dict_player_interface1)
+        dict_player_interface: Dict[PlayerOrder, FeedMock] = {}
+        dict_player_interface[player] = mock_failure
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(ActionResult.FAILURE,
                          feed_tribe_state.feed_tribe(player, resources))
         mock_done = FeedMock(feed_response=True)
-        dict_player_interface2: Dict[PlayerOrder, FeedMock] = Dict(player=mock_done)
-        feed_tribe_state = FeedTribeState(dict_player_interface2)
+        dict_player_interface[player] = mock_done
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(ActionResult.ACTION_DONE,
                          feed_tribe_state.feed_tribe(player, resources))
 
     def test_do_not_feed_this_turn_method(self) -> None:
         player = PlayerOrder(1,1)
         mock_failure = FeedMock()
-        dict_player_interface1: Dict[PlayerOrder, FeedMock] = Dict(player=mock_failure)
-        feed_tribe_state = FeedTribeState(dict_player_interface1)
+        dict_player_interface: Dict[PlayerOrder, FeedMock] = {}
+        dict_player_interface[player] = mock_failure
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(ActionResult.FAILURE,
                          feed_tribe_state.do_not_feed_this_turn(player))
         mock_done = FeedMock(do_not_response=True)
-        dict_player_interface2: Dict[PlayerOrder, FeedMock] = Dict(player=mock_done)
-        feed_tribe_state = FeedTribeState(dict_player_interface2)
+        dict_player_interface = mock_done
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(ActionResult.ACTION_DONE,
                          feed_tribe_state.do_not_feed_this_turn(player))
 
     def test_try_to_make_automatic_action_method(self) -> None:
         player = PlayerOrder(1,1)
         mock_wait = FeedMock()
-        dict_player_interface1: Dict[PlayerOrder, FeedMock] = Dict(player=mock_wait)
-        feed_tribe_state = FeedTribeState(dict_player_interface1)
+        dict_player_interface: Dict[PlayerOrder, FeedMock] = {}
+        dict_player_interface[player] = mock_wait
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(HasAction.WAITING_FOR_PLAYER_ACTION,
                          feed_tribe_state.try_to_make_automatic_action(player))
         mock_done = FeedMock(enough_response=True)
-        dict_player_interface2: Dict[PlayerOrder, FeedMock] = Dict(player=mock_done)
-        feed_tribe_state = FeedTribeState(dict_player_interface2)
+        dict_player_interface[player] = mock_done
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(HasAction.AUTOMATIC_ACTION_DONE,
                          feed_tribe_state.try_to_make_automatic_action(player))
 
     def test_automatic_action_fed_tribe(self) -> None:
         player = PlayerOrder(1,1)
         mock_is_fed = FeedMock(is_fed_response=True)
-        dict_player_interface1: Dict[PlayerOrder, FeedMock] = Dict(player=mock_is_fed)
-        feed_tribe_state = FeedTribeState(dict_player_interface1)
+        dict_player_interface: Dict[PlayerOrder, FeedMock] = {}
+        dict_player_interface[player] = mock_is_fed
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(HasAction.NO_ACTION_POSSIBLE,
                          feed_tribe_state.try_to_make_automatic_action(player))
         mock_enough_food_but_fed = FeedMock(enough_response=True,
                                             is_fed_response=True)
-        dict_player_interface2: Dict[PlayerOrder, FeedMock] = Dict(player=mock_enough_food_but_fed)
-        feed_tribe_state = FeedTribeState(dict_player_interface2)
+        dict_player_interface[player] = mock_enough_food_but_fed
+        feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(HasAction.NO_ACTION_POSSIBLE,
                          feed_tribe_state.try_to_make_automatic_action(player))
 
@@ -91,7 +95,8 @@ class TestFeedTribeState(unittest.TestCase):
         player = PlayerOrder(1,1)
         idx: int = 1
         mock = FeedMock()
-        dict_player_interface: Dict[PlayerOrder, FeedMock] = Dict(player=mock)
+        dict_player_interface: Dict[PlayerOrder, FeedMock] = {}
+        dict_player_interface[player] = mock
         feed_tribe_state = FeedTribeState(dict_player_interface)
         self.assertEqual(ActionResult.FAILURE,
                          feed_tribe_state.use_tools(player, idx))

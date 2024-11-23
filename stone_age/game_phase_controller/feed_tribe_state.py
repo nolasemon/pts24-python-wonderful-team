@@ -12,7 +12,7 @@ class FeedTribeState(GamePhaseStateFailureMeta):
         """Initializing with argument dict_player_interface, 
         where each player has their own interface for feeding the tribe.
         When calling the particular methods, the right one is chosen."""
-        self._dict_player_interface = Dict(dict_player_interface)
+        self._dict_player_interface = dict_player_interface
 
     def feed_tribe(self, player: PlayerOrder, resources: Iterable[Effect]) -> ActionResult:
         assert isinstance(player, PlayerOrder)
