@@ -19,15 +19,16 @@ class PlaceOnHutAdaptor(InterfaceFigureLocationInternal):
         return True
 
     def try_to_place_figures(self, player: Player, count: int) -> HasAction:
-        """If a figure will be placed, action will be done automatically"""
+        """
+        If a figure can be placed, we wait for a player, otherwise there is
+        no action possible.
+        """
         assert isinstance(player, Player) and count > 0
-        if not player.player_board.has_figures(count):
-            return HasAction.NO_ACTION_POSSIBLE
         if count != 2:
             return HasAction.NO_ACTION_POSSIBLE
         if not self._hut.can_place_on_hut(player):
             return HasAction.NO_ACTION_POSSIBLE
-        return HasAction.AUTOMATIC_ACTION_DONE
+        return HasAction.WAITING_FOR_PLAYER_ACTION
 
     def new_turn(self) -> bool:
         """It is no way, that the hut location implies end of the game"""
