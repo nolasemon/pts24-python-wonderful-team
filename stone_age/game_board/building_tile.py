@@ -1,5 +1,6 @@
 from typing import Optional, Union, Iterable
-from stone_age.game_board.simple_types import Player, PlayerOrder
+from stone_age.game_board.simple_types import Player
+from stone_age.simple_types import PlayerOrder
 from stone_age.game_board.interfaces import InterfaceFigureLocationInternal
 from stone_age.game_board import simple_building
 from stone_age.game_board import variable_building
@@ -12,7 +13,9 @@ class BuildingTile(InterfaceFigureLocationInternal):
     def __init__(self, cards: Iterable[Union[simple_building.SimpleBuilding,
         arbitrary_building.ArbitraryBuilding,
         variable_building.VariableBuilding]]):
-        self.cards: list = list(cards)
+        self.cards: list[Union[simple_building.SimpleBuilding,
+        arbitrary_building.ArbitraryBuilding,
+        variable_building.VariableBuilding]] = list(cards)
         self.figures: Optional[PlayerOrder] = None
 
 
