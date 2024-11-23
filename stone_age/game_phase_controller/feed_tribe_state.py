@@ -1,18 +1,18 @@
 from __future__ import annotations
-from typing import Iterable, Mapping
+from typing import Iterable, Dict
 
 from stone_age.game_phase_controller.interfaces import GamePhaseStateFailureMeta
 from stone_age.interfaces import InterfaceFeedTribe
 from stone_age.simple_types import PlayerOrder, ActionResult, HasAction, Effect
 
 class FeedTribeState(GamePhaseStateFailureMeta):
-    _dict_player_interface: Mapping[PlayerOrder, InterfaceFeedTribe]
+    _dict_player_interface: Dict[PlayerOrder, InterfaceFeedTribe]
 
-    def __init__(self, dict_player_interface: Mapping[PlayerOrder, InterfaceFeedTribe]):
+    def __init__(self, dict_player_interface: Dict[PlayerOrder, InterfaceFeedTribe]):
         """Initializing with argument dict_player_interface, 
         where each player has their own interface for feeding the tribe.
         When calling the particular methods, the right one is chosen."""
-        self._dict_player_interface = dict(dict_player_interface)
+        self._dict_player_interface = Dict(dict_player_interface)
 
     def feed_tribe(self, player: PlayerOrder, resources: Iterable[Effect]) -> ActionResult:
         assert isinstance(player, PlayerOrder)
