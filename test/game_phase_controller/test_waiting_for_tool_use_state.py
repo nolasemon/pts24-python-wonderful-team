@@ -17,10 +17,10 @@ class ToolUseMock(InterfaceToolUse):
 
     def use_tool(self, idx: int) -> bool:
         return self._use_response
-    
+
     def finish_using_tools(self) -> bool:
         return self._not_response
-    
+
     def can_use_tools(self) -> bool:
         return self._try_response
 
@@ -37,7 +37,7 @@ class TestWaitingForToolUseState(unittest.TestCase):
         wait_for_tool_use_done = WaitingForToolUseState(tool_use_done)
         self.assertEqual(ActionResult.ACTION_DONE,
                          wait_for_tool_use_done.use_tools(player, idx))
-        
+
     def test_no_more_tools_this_throw_method(self) -> None:
         player = PlayerOrder(1,1)
         tool_use_failure = ToolUseMock()
