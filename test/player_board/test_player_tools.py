@@ -67,13 +67,15 @@ class TestPlayerTools(unittest.TestCase):
         self.assertIn("Single-use tool: 3, unused", p1.state())
         p1.add_tool()
         p1.add_tool()
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\nSingle-use tool: 3, unused", p1.state())
+        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
+                      "Single-use tool: 3, unused", p1.state())
         p1.add_single_use_tool(2)
         self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
                       "Single-use tool: 3, unused\nSingle-use tool: 2, unused", p1.state())
         self.assertTrue(p1.has_sufficient_tools(5))
         p1.use_tool(3)
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\nSingle-use tool: 2, unused", p1.state())
+        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
+                      "Single-use tool: 2, unused", p1.state())
         self.assertFalse(p1.has_sufficient_tools(5))
         p1.add_tool()
         self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
@@ -98,15 +100,14 @@ class TestPlayerTools(unittest.TestCase):
         p1.add_single_use_tool(3)
         p1.add_single_use_tool(4)
         self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused\n"
-                      "Single-use tool: 2, unused\nSingle-use tool: 3, unused\nSingle-use tool: 4, unused",
-                      p1.state())
+                      "Single-use tool: 2, unused\nSingle-use tool: 3, unused\n"
+                      "Single-use tool: 4, unused", p1.state())
         p1.add_tool()
         p1.add_tool()
         p1.add_single_use_tool(2)
         self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused\n"
-                      "Single-use tool: 2, unused\nSingle-use tool: 3, unused\nSingle-use tool: 4, unused\n"
-                      "Single-use tool: 2, unused",
-                      p1.state())
+                      "Single-use tool: 2, unused\nSingle-use tool: 3, unused\n"
+                      "Single-use tool: 4, unused\nSingle-use tool: 2, unused", p1.state())
         p1.use_tool(4)
         p1.use_tool(5)
         self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused\n"
@@ -134,7 +135,7 @@ class TestPlayerTools(unittest.TestCase):
         p1 = PlayerTools()
 
         self.assertFalse(p1.has_sufficient_tools(goal))
-        for i in range(250):
+        for _ in range(250):
             p1.add_single_use_tool(4)
         self.assertTrue(p1.has_sufficient_tools(goal))
         p1.use_tool(250)
