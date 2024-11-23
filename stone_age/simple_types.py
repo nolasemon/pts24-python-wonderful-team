@@ -115,7 +115,7 @@ class ImmediateEffect(Enum):
 	
 class EndOfGameEffect(IntEnum):
     FARMER = 1
-    TOOLMAKER = 2
+    TOOL_MAKER = 2
     BUILDER = 3
     SHAMAN = 4
     MEDICINE = 5
