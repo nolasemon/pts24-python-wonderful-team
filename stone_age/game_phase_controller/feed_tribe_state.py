@@ -5,6 +5,7 @@ from stone_age.game_phase_controller.interfaces import GamePhaseStateFailureMeta
 from stone_age.interfaces import InterfaceFeedTribe
 from stone_age.simple_types import PlayerOrder, ActionResult, HasAction, Effect
 
+
 class FeedTribeState(GamePhaseStateFailureMeta):
     _dict_player_interface: Dict[PlayerOrder, InterfaceFeedTribe]
 

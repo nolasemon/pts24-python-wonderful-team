@@ -5,12 +5,13 @@ from stone_age.game_phase_controller.waiting_for_tool_use_state import WaitingFo
 from stone_age.interfaces import InterfaceToolUse
 from stone_age.simple_types import PlayerOrder, ActionResult, HasAction, Location, Effect
 
+
 class ToolUseMock(InterfaceToolUse):
     _use_response: bool
     _not_response: bool
     _try_response: bool
 
-    def __init__(self, use_response: bool = False, not_response:bool = False,
+    def __init__(self, use_response: bool = False, not_response: bool = False,
                  try_response: bool = False):
         self._use_response = use_response
         self._not_response = not_response
@@ -28,7 +29,7 @@ class ToolUseMock(InterfaceToolUse):
 
 class TestWaitingForToolUseState(unittest.TestCase):
     def test_use_tool_method(self) -> None:
-        player = PlayerOrder(1,1)
+        player = PlayerOrder(1, 1)
         idx: int = 1
         tool_use_failure = ToolUseMock()
         wait_for_tool_use_failure = WaitingForToolUseState(tool_use_failure)
@@ -40,7 +41,7 @@ class TestWaitingForToolUseState(unittest.TestCase):
                          wait_for_tool_use_done.use_tools(player, idx))
 
     def test_no_more_tools_this_throw_method(self) -> None:
-        player = PlayerOrder(1,1)
+        player = PlayerOrder(1, 1)
         tool_use_failure = ToolUseMock()
         wait_for_tool_use_failure = WaitingForToolUseState(tool_use_failure)
         self.assertEqual(ActionResult.FAILURE,
@@ -51,7 +52,7 @@ class TestWaitingForToolUseState(unittest.TestCase):
                          wait_for_tool_use_done.no_more_tools_this_throw(player))
 
     def try_to_make_automatic_action_method(self) -> None:
-        player = PlayerOrder(1,1)
+        player = PlayerOrder(1, 1)
         tool_use_failure = ToolUseMock()
         wait_for_tool_use_failure = WaitingForToolUseState(tool_use_failure)
         self.assertEqual(HasAction.NO_ACTION_POSSIBLE,
@@ -64,7 +65,7 @@ class TestWaitingForToolUseState(unittest.TestCase):
     def test_wrong_action_this_phase(self) -> None:
         mock = ToolUseMock()
         waiting_for_tool_use_state = WaitingForToolUseState(mock)
-        player = PlayerOrder(1,1)
+        player = PlayerOrder(1, 1)
         place = Location.FIELD
         in_resources: Iterable[Effect] = []
         out_resources: Iterable[Effect] = []
