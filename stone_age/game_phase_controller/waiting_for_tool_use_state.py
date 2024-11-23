@@ -17,7 +17,7 @@ class WaitingForToolUseState(GamePhaseStateFailureMeta):
         if self._interface_tool_use.use_tool(tool_index):
             return ActionResult.ACTION_DONE
         return ActionResult.FAILURE
-    
+
     def no_more_tools_this_throw(self, player: PlayerOrder) -> ActionResult:
         assert isinstance(player, PlayerOrder)
         if self._interface_tool_use.finish_using_tools():
