@@ -1,6 +1,6 @@
 from typing import Dict, Iterable
 from stone_age.simple_types import PlayerOrder, HasAction, ActionResult, Effect
-from stone_age.interfaces import InterfaceFigureLocation, InterfacePlayerBoardGameBoard
+from stone_age.interfaces import InterfaceFigureLocation
 from stone_age.game_board.simple_types import Player
 from stone_age.game_board.interfaces import InterfaceFigureLocationInternal
 
