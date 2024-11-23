@@ -141,7 +141,7 @@ class TestBuildingTile(unittest.TestCase):
 
     def test_skip_action_success_remove_figure(self) -> None:
         player = Player(PlayerOrder(3, 4), InterfacePlayerBoardGameBoard())
-        self.building_tile.figures = player.player_order  # Current player's figure
+        self.building_tile.figures = player.player_order
         assert self.building_tile is not None
         result = self.building_tile.skip_action(player)
         self.assertTrue(result)
@@ -150,13 +150,13 @@ class TestBuildingTile(unittest.TestCase):
     # Tests for try_to_make_action
     def test_try_to_make_action_no_action_player_order_mismatch(self) -> None:
         player = Player(PlayerOrder(0, 4), InterfacePlayerBoardGameBoard())
-        self.building_tile.figures = PlayerOrder(2, 4) # Another player's figure
+        self.building_tile.figures = PlayerOrder(2, 4)
         assert self.building_tile is not None
         result = self.building_tile.try_to_make_action(player)
         self.assertEqual(result, HasAction.NO_ACTION_POSSIBLE)
 
     def test_try_to_make_action_no_action_possible_no_cards(self) -> None:
-        self.building_tile.cards.clear()  # No cards available
+        self.building_tile.cards.clear()
         player = Player(PlayerOrder(0, 4), InterfacePlayerBoardGameBoard())
         assert self.building_tile is not None
         self.building_tile.figures = player.player_order
@@ -168,7 +168,7 @@ class TestBuildingTile(unittest.TestCase):
             [Effect.CLAY, Effect.GOLD, Effect.STONE])
             , ArbitraryBuilding(5), VariableBuilding(4, 2)])
         player = Player(PlayerOrder(1, 4), InterfacePlayerBoardGameBoard())
-        self.building_tile.figures = None  # No figure on the tile
+        self.building_tile.figures = None
         assert self.building_tile is not None
         result = self.building_tile.try_to_make_action(player)
         self.assertEqual(result, HasAction.NO_ACTION_POSSIBLE)
@@ -176,7 +176,7 @@ class TestBuildingTile(unittest.TestCase):
     def test_try_to_make_action_success(self) -> None:
         player = Player(PlayerOrder(0, 4), InterfacePlayerBoardGameBoard())
         assert self.building_tile is not None
-        self.building_tile.figures = player.player_order  # Current player's figure
+        self.building_tile.figures = player.player_order
         result = self.building_tile.try_to_make_action(player)
         self.assertEqual(result, HasAction.AUTOMATIC_ACTION_DONE)
 
