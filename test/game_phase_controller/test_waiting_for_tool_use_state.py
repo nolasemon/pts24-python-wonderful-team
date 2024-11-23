@@ -1,8 +1,9 @@
 import unittest
+from typing import Iterable
 
 from stone_age.game_phase_controller.waiting_for_tool_use_state import WaitingForToolUseState
 from stone_age.interfaces import InterfaceToolUse
-from stone_age.simple_types import PlayerOrder, ActionResult, HasAction
+from stone_age.simple_types import PlayerOrder, ActionResult, HasAction, Location, Effect
 
 class ToolUseMock(InterfaceToolUse):
     _use_response: bool
@@ -59,3 +60,15 @@ class TestWaitingForToolUseState(unittest.TestCase):
         wait_for_tool_use = WaitingForToolUseState(tool_use_wait)
         self.assertEqual(HasAction.WAITING_FOR_PLAYER_ACTION,
                          wait_for_tool_use.try_to_make_automatic_action(player))
+
+    def test_wrong_action_this_phase(self) -> None:
+        mock = ToolUseMock()
+        waiting_for_tool_use_state = WaitingForToolUseState(mock)
+        player = PlayerOrder(1,1)
+        place = Location.FIELD
+        in_resources: Iterable[Effect] = []
+        out_resources: Iterable[Effect] = []
+        self.assertEqual(ActionResult.FAILURE,
+                         waiting_for_tool_use_state.make_action(player, place,
+                                                                in_resources,
+                                                                out_resources))

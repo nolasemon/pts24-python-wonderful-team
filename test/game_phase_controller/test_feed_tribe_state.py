@@ -78,3 +78,11 @@ class TestFeedTribeState(unittest.TestCase):
         feed_tribe_state = FeedTribeState(mock_enough_food_but_fed)
         self.assertEqual(HasAction.NO_ACTION_POSSIBLE,
                          feed_tribe_state.try_to_make_automatic_action(player))
+
+    def test_wrong_action_tried_this_phase(self) -> None:
+        player = PlayerOrder(1,1)
+        idx: int = 1
+        mock = FeedMock()
+        feed_tribe_state = FeedTribeState(mock)
+        self.assertEqual(ActionResult.FAILURE,
+                         feed_tribe_state.use_tools(player, idx))
