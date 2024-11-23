@@ -96,3 +96,18 @@ class HasAction(Enum):
     WAITING_FOR_PLAYER_ACTION = 1
     AUTOMATIC_ACTION_DONE = 2
     NO_ACTION_POSSIBLE = 3
+
+
+class EndOfGameEffect(IntEnum):
+    FARMER = 1
+    TOOLMAKER = 2
+    BUILDER = 3
+    SHAMAN = 4
+    MEDICINE = 5
+    ART = 6
+    MUSIC = 7
+    WRITING = 8
+    SUNDIAL = 9
+    POTTERY = 10
+    TRANSPORT = 11
+    WEAVING = 12
