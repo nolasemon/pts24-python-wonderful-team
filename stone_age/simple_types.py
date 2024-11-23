@@ -31,6 +31,9 @@ class PlayerOrder:
         assert self._players == other.players
         return self._order == other.order
 
+    def __hash__(self) -> int:
+        return hash((self.order, self.players))
+
 
 class Location(Enum):
     TOOL_MAKER = 1
