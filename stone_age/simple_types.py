@@ -97,6 +97,7 @@ class HasAction(Enum):
     AUTOMATIC_ACTION_DONE = 2
     NO_ACTION_POSSIBLE = 3
 
+
 class ImmediateEffect(Enum):
     THROW_WOOD = 1
     THROW_CLAY = 2
@@ -111,7 +112,8 @@ class ImmediateEffect(Enum):
     ARBITRARY_RESOURCE = 11
     FOOD = 12
 
-class EndOfGameEffect(Enum):
+
+class EndOfGameEffect(IntEnum):
     FARMER = 1
     TOOL_MAKER = 2
     BUILDER = 3
@@ -124,6 +126,7 @@ class EndOfGameEffect(Enum):
     POTTERY = 10
     TRANSPORT = 11
     WEAVING = 12
+
 
 class CivilisationCard:
     _immediate_effects: list[ImmediateEffect]
