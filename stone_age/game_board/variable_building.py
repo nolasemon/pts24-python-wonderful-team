@@ -1,4 +1,5 @@
 from typing import Iterable, Optional
+import json
 from stone_age.simple_types import Effect
 from stone_age.game_board. interfaces import Building
 
@@ -29,3 +30,9 @@ class VariableBuilding(Building):
     @property
     def get_number_of_resources_types(self) -> int:
         return self._number_of_resources_types           #method for testing
+
+    def state(self) -> str:
+        d: dict[str, str] = {"Type": "VariableBuilding",
+                             "NumberOfResources": f"{self._number_of_resources}",
+                             "NumberOfResourcesTypes": f"{self._number_of_resources_types}"}
+        return json.dumps(d)

@@ -1,4 +1,5 @@
 from typing import Optional, Union, Iterable
+import json
 from stone_age.game_board.simple_types import Player
 from stone_age.simple_types import PlayerOrder
 from stone_age.game_board.interfaces import InterfaceFigureLocationInternal
@@ -37,13 +38,11 @@ class BuildingTile(InterfaceFigureLocationInternal):
             return HasAction.NO_ACTION_POSSIBLE
         if not self.cards:
             return HasAction.NO_ACTION_POSSIBLE
-        return HasAction.AUTOMATIC_ACTION_DONE
+        return HasAction.WAITING_FOR_PLAYER_ACTION
 
     def make_action(self, player: Player, input_resources: Iterable[Effect],
                     output_resources: Iterable[Effect]) -> ActionResult:
-        if self.figures is not None:
-            return ActionResult.FAILURE
-        if output_resources != input_resources:
+        if self.figures is None:
             return ActionResult.FAILURE
         card: Union[simple_building.SimpleBuilding,
         arbitrary_building.ArbitraryBuilding,
@@ -53,9 +52,7 @@ class BuildingTile(InterfaceFigureLocationInternal):
                 self.try_to_make_action(player) == HasAction.NO_ACTION_POSSIBLE):
             return ActionResult.FAILURE
         if player.player_board.take_resourses(input_resources):
-            player.player_board.give_figure()
-#           player.player_board.give_card()
-#           player.player_board.give_points(result)
+            self.figures = None
             self.cards.pop()
             return ActionResult.ACTION_DONE
         return ActionResult.FAILURE
@@ -64,7 +61,7 @@ class BuildingTile(InterfaceFigureLocationInternal):
         if self.figures is not None and player.player_order != self.figures:
             return False
         if self.figures is None:
-            return True
+            return False
         player.player_board.give_figure()
         self.figures = None
         return True
@@ -77,7 +74,16 @@ class BuildingTile(InterfaceFigureLocationInternal):
             return HasAction.NO_ACTION_POSSIBLE
         if not self.figures:
             return HasAction.NO_ACTION_POSSIBLE
-        return HasAction.AUTOMATIC_ACTION_DONE
+        return HasAction.WAITING_FOR_PLAYER_ACTION
 
     def new_turn(self) -> bool:
+        if not self.cards:
+            return True
         return False
+
+    def state(self) -> str:
+        d: dict[str, str] = {"TakenBy": f"{self.figures}"
+        if self.figures is not None else "None",
+                             "CardsInPile": "[]" if not self.cards else
+                             "\n".join(x.state() for x in self.cards)}
+        return json.dumps(d)

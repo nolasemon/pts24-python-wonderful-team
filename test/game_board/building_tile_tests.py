@@ -24,7 +24,7 @@ class TestBuildingTile(unittest.TestCase):
         player: Player = Player(PlayerOrder(0, 3), InterfacePlayerBoardGameBoard())
         assert self.building_tile is not None
         result: HasAction = self.building_tile.try_to_place_figures(player, count=1)
-        self.assertEqual(result, HasAction.AUTOMATIC_ACTION_DONE)
+        self.assertEqual(result, HasAction.WAITING_FOR_PLAYER_ACTION)
 
     def test_try_to_place_figures_no_action_possible_too_many_figures(self) -> None:
         player: Player = Player(PlayerOrder(0, 4), InterfacePlayerBoardGameBoard())
@@ -135,7 +135,7 @@ class TestBuildingTile(unittest.TestCase):
         assert self.building_tile is not None
         self.building_tile.figures = player.player_order
         result = self.building_tile.try_to_make_action(player)
-        self.assertEqual(result, HasAction.AUTOMATIC_ACTION_DONE)
+        self.assertEqual(result, HasAction.WAITING_FOR_PLAYER_ACTION)
 
 
 if __name__ == '__main__':
