@@ -23,8 +23,8 @@ class PlayerTools(InterfaceGetState):
         raise NotImplementedError
 
     @property
-    def get_tool_count(self) -> int:
+    def tool_count(self) -> int:
         return len(self._tools)
 
     def state(self) -> str:
-        return f"Tools: {self._tools}, used: {self._used_tools}"
+        raise NotImplementedError

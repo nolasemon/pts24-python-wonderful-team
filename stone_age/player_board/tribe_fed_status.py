@@ -27,8 +27,8 @@ class TribeFedStatus(InterfaceGetState):
         return self._tribe_fed
 
     @property
-    def get_fields(self) -> int:
+    def fields(self) -> int:
         return self._fields
 
     def state(self) -> str:
-        return f"Tribe fed: {self._tribe_fed}, fields: {self._fields}"
+        raise NotImplementedError

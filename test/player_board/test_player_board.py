@@ -37,8 +37,8 @@ class TestPlayerBoard(unittest.TestCase):
     def test_initial_state(self) -> None:
         """Test initial state of the player board"""
         state = self.board.state()
-        self.assertIn("Points: 0", state)
-        self.assertIn("Houses: 0", state)
+        self.assertIn('"points": 0', state)
+        self.assertIn('"houses": 0', state)
         self.assertIn("Mock cards state", state)
         self.assertIn("Mock tools state", state)
         self.assertIn("Mock resources state", state)
@@ -48,23 +48,23 @@ class TestPlayerBoard(unittest.TestCase):
     def test_add_points(self) -> None:
         """Test adding points"""
         self.board.add_points(5)
-        self.assertIn("Points: 5", self.board.state())
+        self.assertIn('"points": 5', self.board.state())
         self.board.add_points(3)
-        self.assertIn("Points: 8", self.board.state())
+        self.assertIn('"points": 8', self.board.state())
 
     def test_add_house(self) -> None:
         """Test adding houses"""
         self.board.add_house()
-        self.assertIn("Houses: 1", self.board.state())
+        self.assertIn('"houses": 1', self.board.state())
         self.board.add_house()
-        self.assertIn("Houses: 2", self.board.state())
+        self.assertIn('"houses": 2', self.board.state())
 
     def test_add_end_of_game_points(self) -> None:
         """Test end of game points calculation"""
         self.resources_and_food.number_of_resources_for_final_points.return_value = 10
         self.cards.calculate_end_of_game_civilisation_card_points.return_value = 15
-        self.tools.get_tool_count.return_value = 3
-        self.fed_status.get_fields.return_value = 4
+        self.tools.tool_count.return_value = 3
+        self.fed_status.fields.return_value = 4
         self.figures.get_total_figures.return_value = 5
 
         self.board.add_points(5)
@@ -72,7 +72,7 @@ class TestPlayerBoard(unittest.TestCase):
         self.board.add_end_of_game_points()
 
         # Verify final points (5 initial + 10 resources + 15 civilization cards = 30)
-        self.assertIn("Points: 30", self.board.state())
+        self.assertIn('"points": 30', self.board.state())
 
     def test_add_end_of_game_points_with_houses(self) -> None:
         """Test end of game points calculation with houses"""
@@ -87,4 +87,4 @@ class TestPlayerBoard(unittest.TestCase):
         self.board.add_end_of_game_points()
 
         # Verify final points (3 initial + 5 resources + 10 civilization cards = 18)
-        self.assertIn("Points: 18", self.board.state())
+        self.assertIn('"points": 18', self.board.state())

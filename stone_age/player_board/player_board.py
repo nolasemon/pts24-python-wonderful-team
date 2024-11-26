@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from typing import Any
+import json
 from stone_age.interfaces import InterfaceGetState
 from stone_age.player_board.player_civilisation_cards import PlayerCivilisationCards
 from stone_age.player_board.player_tools import PlayerTools
@@ -38,18 +40,19 @@ class PlayerBoard(InterfaceGetState):
         self._points += self._resources_and_food.number_of_resources_for_final_points()
         self._points += self._cards.calculate_end_of_game_civilisation_card_points(
             self._houses,
-            self._tools.get_tool_count,
-            self._fed_status.get_fields,
+            self._tools.tool_count,
+            self._fed_status.fields,
             self._figures.get_total_figures
         )
 
     def state(self) -> str:
-        return "\n".join([
-            f"Points: {self._points}",
-            f"Houses: {self._houses}",
-            f"Civilisation cards:\n{self._cards.state()}",
-            f"Tools:\n{self._tools.state()}",
-            f"Resources and food:\n{self._resources_and_food.state()}",
-            f"Tribe fed status:\n{self._fed_status.state()}",
-            f"Figures:\n{self._figures.state()}"
-        ])
+        state: Any = {
+            "points": self._points,
+            "houses": self._houses,
+            "civilisation cards": self._cards.state(),
+            "tools": self._tools.state(),
+            "resources and food": self._resources_and_food.state(),
+            "tribe fed status": self._fed_status.state(),
+            "figures": self._figures.state()
+        }
+        return json.dumps(state)
