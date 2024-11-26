@@ -1,6 +1,6 @@
 # pylint: disable=unused-argument, duplicate-code
 from typing import Iterable, Optional
-from stone_age.simple_types import Effect, HasAction, ActionResult, PlayerOrder
+from stone_age.simple_types import Effect, HasAction, ActionResult
 from stone_age.game_board.simple_types import Player
 
 
@@ -41,8 +41,5 @@ class InterfaceFigureLocationInternal:
 
 
 class EvaluateCivilizationCardImmediateEffect:
-    def perform_effect(self, player: PlayerOrder, choice: Effect) -> bool:
-        assert isinstance(
-            player, PlayerOrder), "player must be a PlayerOrder object."
-        assert isinstance(choice, Effect), "choice must be an Effect object."
-        return False
+    def perform_effect(self, player: Player, choice: Optional[Effect]) -> ActionResult:
+        assert False
