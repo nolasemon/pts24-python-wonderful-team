@@ -14,7 +14,7 @@ class LocationMock(InterfaceFigureLocation):
     try_make_responses: List[HasAction]
     new_turn_responses: List[bool]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.place_responses = []
         self.try_place_responses = []
         self.make_action_responses = []
