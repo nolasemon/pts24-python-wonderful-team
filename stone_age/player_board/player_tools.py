@@ -46,7 +46,7 @@ class PlayerTools(InterfaceGetState):
                 strength_sum += tool
 
         return strength_sum >= goal
-      
+
     @property
     def tool_count(self) -> int:
         return len(self._tools)
