@@ -8,7 +8,7 @@ class GetCard(EvaluateCivilizationCardImmediateEffect):
     def __init__(self, card_deck: CivilizationCardDeck):
         self._card_deck = card_deck
 
-    def perform_effect(self, player: Player, choice: Effect) -> ActionResult:
+    def perform_effect(self, player: Player, choice: Optional[Effect]) -> ActionResult:
         top_card: Optional[CivilisationCard] = self._card_deck.get_top()
         if top_card is None:
             return ActionResult.ACTION_DONE
