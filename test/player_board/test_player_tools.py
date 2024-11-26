@@ -16,19 +16,22 @@ class TestPlayerTools(unittest.TestCase):
         for _ in range(4):
             p1.add_tool()
 
-        self.assertIn("Tool 1: 2, unused\nTool 2: 2, unused\nTool 3: 2, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 2, unused\nTool 2: 2, unused\nTool 3: 2, unused", p1.state())
         self.assertFalse(p1.has_sufficient_tools(11))
 
         for _ in range(4):
             p1.add_tool()
 
-        self.assertIn("Tool 1: 4, unused\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 4, unused\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
         self.assertFalse(p1.has_sufficient_tools(11))
 
         for _ in range(3):
             p1.add_tool()
 
-        self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused", p1.state())
         self.assertTrue(p1.has_sufficient_tools(11))
 
     def test_figures_taking(self) -> None:
@@ -40,12 +43,15 @@ class TestPlayerTools(unittest.TestCase):
         self.assertTrue(p1.has_sufficient_tools(7))
         p1.use_tool(0)
         self.assertFalse(p1.has_sufficient_tools(7))
-        self.assertIn("Tool 1: 4, used\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 4, used\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
         p1.use_tool(1)
         p1.use_tool(2)
-        self.assertIn("Tool 1: 4, used\nTool 2: 3, used\nTool 3: 3, used", p1.state())
+        self.assertIn(
+            "Tool 1: 4, used\nTool 2: 3, used\nTool 3: 3, used", p1.state())
         p1.add_tool()
-        self.assertIn("Tool 1: 4, used\nTool 2: 4, used\nTool 3: 3, used", p1.state())
+        self.assertIn(
+            "Tool 1: 4, used\nTool 2: 4, used\nTool 3: 3, used", p1.state())
         self.assertFalse(p1.has_sufficient_tools(4))
 
     def test_new_turn(self) -> None:
@@ -56,9 +62,11 @@ class TestPlayerTools(unittest.TestCase):
 
         p1.use_tool(0)
         p1.use_tool(1)
-        self.assertIn("Tool 1: 4, used\nTool 2: 3, used\nTool 3: 3, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 4, used\nTool 2: 3, used\nTool 3: 3, unused", p1.state())
         p1.new_turn()
-        self.assertIn("Tool 1: 4, unused\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 4, unused\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
 
     def test_single_use_tool(self) -> None:
         p1 = PlayerTools()
@@ -95,7 +103,8 @@ class TestPlayerTools(unittest.TestCase):
         for _ in range(100):
             p1.add_tool()
 
-        self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused", p1.state())
+        self.assertIn(
+            "Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused", p1.state())
         p1.add_single_use_tool(2)
         p1.add_single_use_tool(3)
         p1.add_single_use_tool(4)
