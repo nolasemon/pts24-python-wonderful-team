@@ -46,6 +46,7 @@ class ToolMakerHutFields:
     def place_on_tool_maker(self, player: Player) -> bool:
         if not self.can_place_on_tool_maker(player):
             return False
+        player.player_board.take_figures(1)
         self.tool_maker_figures.append(player.player_order)
         return True
 
@@ -60,6 +61,8 @@ class ToolMakerHutFields:
 
     def can_place_on_tool_maker(self, player: Player) -> bool:
         assert isinstance(player, Player)
+        if not player.player_board.has_figures(1):
+            return False
         if not self.can_place_at_all():
             return False
         if len(self.tool_maker_figures) > 0:
@@ -69,6 +72,7 @@ class ToolMakerHutFields:
     def place_on_hut(self, player: Player) -> bool:
         if not self.can_place_on_hut(player):
             return False
+        player.player_board.take_figures(2)
         self.hut_figures.append(player.player_order)
         self.hut_figures.append(player.player_order)
         return True
@@ -84,6 +88,8 @@ class ToolMakerHutFields:
 
     def can_place_on_hut(self, player: Player) -> bool:
         assert isinstance(player, Player)
+        if not player.player_board.has_figures(2):
+            return False
         if not self.can_place_at_all():
             return False
         if len(self.hut_figures) > 0:
@@ -93,6 +99,7 @@ class ToolMakerHutFields:
     def place_on_fields(self, player: Player) -> bool:
         if not self.can_place_on_fields(player):
             return False
+        player.player_board.take_figures(1)
         self.fields_figures.append(player.player_order)
         return True
 
@@ -107,6 +114,8 @@ class ToolMakerHutFields:
 
     def can_place_on_fields(self, player: Player) -> bool:
         assert isinstance(player, Player)
+        if not player.player_board.has_figures(1):
+            return False
         if not self.can_place_at_all():
             return False
         if len(self.fields_figures) > 0:
