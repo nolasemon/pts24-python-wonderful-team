@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 from typing import Iterable
 from stone_age.simple_types import HasAction, Effect, ActionResult
 from stone_age.game_board.simple_types import Player
@@ -30,7 +31,6 @@ class PlaceOnToolMakerAdaptor(InterfaceFigureLocationInternal):
         if not self._tool_maker.can_place_on_tool_maker(player):
             return HasAction.NO_ACTION_POSSIBLE
         return HasAction.WAITING_FOR_PLAYER_ACTION
-
 
     def make_action(self, player: Player, input_resources: Iterable[Effect],
                     output_resources: Iterable[Effect]) -> ActionResult:

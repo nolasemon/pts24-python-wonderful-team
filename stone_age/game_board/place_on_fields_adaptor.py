@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 from typing import Iterable
 from stone_age.simple_types import HasAction, Effect, ActionResult
 from stone_age.game_board.simple_types import Player
