@@ -1,4 +1,5 @@
-from stone_age.simple_types import HasAction
+from typing import Iterable
+from stone_age.simple_types import HasAction, Effect, ActionResult
 from stone_age.game_board.simple_types import Player
 from stone_age.game_board.interfaces import InterfaceFigureLocationInternal
 from stone_age.game_board.tool_maker_hut_fields import ToolMakerHutFields
@@ -29,6 +30,37 @@ class PlaceOnFieldsAdaptor(InterfaceFigureLocationInternal):
         if not self._fields.can_place_on_fields(player):
             return HasAction.NO_ACTION_POSSIBLE
         return HasAction.WAITING_FOR_PLAYER_ACTION
+
+    def make_action(self, player: Player, input_resources: Iterable[Effect],
+                    output_resources: Iterable[Effect]) -> ActionResult:
+        """
+        The player needs neither input nor output resources to make an action on Fields.
+        After the action location must be clear and prepared a new turn.
+        """
+        assert isinstance(player, Player)
+        assert all(isinstance(effect, Effect) for effect in input_resources)
+        assert all(isinstance(effect, Effect) for effect in output_resources)
+        if input_resources:
+            return ActionResult.FAILURE
+        if output_resources:
+            return ActionResult.FAILURE
+        if not self._fields.action_fields(player):
+            return ActionResult.FAILURE
+        self._fields.new_turn()
+        return ActionResult.ACTION_DONE
+
+    def skip_action(self, player: Player) -> bool:
+        """It is no way, that player can take her figure and leave fields in place"""
+        return False
+
+    def try_to_make_action(self, player: Player) -> HasAction:
+        """If action can be made, it will be done automatically"""
+        assert isinstance(player, Player)
+        if not self._fields.can_make_action_on_fields(player):
+            return HasAction.NO_ACTION_POSSIBLE
+        if self.make_action(player, [], []) == ActionResult.FAILURE:
+            return HasAction.NO_ACTION_POSSIBLE
+        return HasAction.AUTOMATIC_ACTION_DONE
 
     def new_turn(self) -> bool:
         """It is no way, that fields location implies end of the game"""
