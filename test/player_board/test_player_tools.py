@@ -214,7 +214,7 @@ class TestPlayerTools(unittest.TestCase):
         p1.new_turn()
         self.assertTrue(p1.has_sufficient_tools(12))
 
-    def test_use_two_times(self):
+    def test_use_two_times(self) -> None:
         p1 = PlayerTools()
 
         for _ in range(12):
