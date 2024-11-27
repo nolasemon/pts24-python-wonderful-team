@@ -1,7 +1,7 @@
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 from __future__ import annotations
 
-from typing import Mapping, Dict
+from typing import Mapping
 
 from stone_age.game_phase_controller.game_phase_controller import GamePhaseController
 from stone_age.game_phase_controller.place_figures_state import PlaceFiguresState
@@ -18,13 +18,13 @@ from stone_age.interfaces import InterfaceFigureLocation, InterfaceToolUse, \
 from stone_age.simple_types import PlayerOrder, Location
 
 
-def factory(places: Mapping[Location, InterfaceFigureLocation],
-            if_tool_use: InterfaceToolUse,
-            if_take_reward: InterfaceTakeReward,
-            players_new_turn: Mapping[PlayerOrder, InterfaceNewTurn],
-            players_feed_tribe: Dict[PlayerOrder, InterfaceFeedTribe],
-            starting_player: PlayerOrder,
-            ) -> InterfaceGamePhaseController:
+def game_phase_controller_factory(places: Mapping[Location, InterfaceFigureLocation],
+                                  if_tool_use: InterfaceToolUse,
+                                  if_take_reward: InterfaceTakeReward,
+                                  players_new_turn: Mapping[PlayerOrder, InterfaceNewTurn],
+                                  players_feed_tribe: Mapping[PlayerOrder, InterfaceFeedTribe],
+                                  starting_player: PlayerOrder,
+                                  ) -> InterfaceGamePhaseController:
     place_figures_state = PlaceFiguresState(places)
     make_action_state = MakeActionState(places)
     new_round_state = NewRoundState(places, players_new_turn)

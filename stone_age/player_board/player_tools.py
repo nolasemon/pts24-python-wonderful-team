@@ -1,7 +1,8 @@
 from typing import List, Optional
+from stone_age.interfaces import InterfaceGetState
 
 
-class PlayerTools:
+class PlayerTools(InterfaceGetState):
 
     def __init__(self) -> None:
         self._tools: List[int] = [0] * 3
@@ -45,6 +46,10 @@ class PlayerTools:
                 strength_sum += tool
 
         return strength_sum >= goal
+
+    @property
+    def tool_count(self) -> int:
+        return len(self._tools)
 
     def state(self) -> str:
         return '\n'.join([f"{'Single-use tool: ' if index >= 3 else f'Tool {index + 1}: '}"

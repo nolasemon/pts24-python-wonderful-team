@@ -26,7 +26,7 @@ class NewRoundState(GamePhaseStateFailureMeta):
         """NO_ACTION_POSSIBLE in NEW_ROUND game phase triggers GAME_END."""
         for player_board in self._new_turn:
             self._new_turn[player_board].new_turn()
-        for place in self._places:
+        for place in sorted(self._places.keys()):
             if self._places[place].new_turn():
                 return HasAction.NO_ACTION_POSSIBLE
         return HasAction.AUTOMATIC_ACTION_DONE
