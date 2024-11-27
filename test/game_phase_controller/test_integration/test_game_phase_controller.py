@@ -48,8 +48,6 @@ class GamePhaseControllerIntegration(unittest.TestCase):
         self.locations[Location.TOOL_MAKER].place_responses = [True] * self.n
         self.locations[Location.TOOL_MAKER].try_place_responses = [
             HasAction.NO_ACTION_POSSIBLE] * self.n
-        self.locations[Location.TOOL_MAKER].make_action_responses = \
-            [ActionResult.ACTION_DONE] * self.n
         self.locations[Location.TOOL_MAKER].try_make_responses = [
             HasAction.NO_ACTION_POSSIBLE] * self.n
         for player in self.players:
@@ -142,3 +140,100 @@ class GamePhaseControllerIntegration(unittest.TestCase):
         # player 2 unsuccessful, he must try again
         self.assertTrue(self.gpc.place_figures(self.players[2], Location.TOOL_MAKER, 1))
         self.assertFalse(self.gpc.place_figures(self.players[0], Location.TOOL_MAKER, 1))
+
+    def test_making_simple(self) -> None:
+        self.mock_setup(2, [Location.TOOL_MAKER])
+        self.locations[Location.TOOL_MAKER].place_responses = [True] * 2
+        self.locations[Location.TOOL_MAKER].try_place_responses = \
+            [HasAction.WAITING_FOR_PLAYER_ACTION] + [HasAction.NO_ACTION_POSSIBLE] * 2
+        self.locations[Location.TOOL_MAKER].try_make_responses = [
+            HasAction.WAITING_FOR_PLAYER_ACTION] * 3
+        self.locations[Location.TOOL_MAKER].make_action_responses = [ActionResult.ACTION_DONE] * 2
+
+        self.assertTrue(self.gpc.place_figures(self.players[0], Location.TOOL_MAKER, 1))
+        self.assertTrue(self.gpc.place_figures(self.players[1], Location.TOOL_MAKER, 1))
+
+        state = json.loads(self.gpc.state())
+        self.assertEqual(state["game phase"], "GamePhase.MAKE_ACTION")
+
+        self.assertTrue(self.gpc.make_action(self.players[0], Location.TOOL_MAKER, [], []))
+        self.assertTrue(self.gpc.make_action(self.players[0], Location.TOOL_MAKER, [], []))
+
+    def test_making_complicated(self) -> None:
+        self.mock_setup(4, [Location.TOOL_MAKER])
+        self.locations[Location.TOOL_MAKER].place_responses = [True]
+        self.locations[Location.TOOL_MAKER].try_place_responses = \
+            [HasAction.NO_ACTION_POSSIBLE] * 4
+        self.locations[Location.TOOL_MAKER].try_make_responses = [
+            HasAction.WAITING_FOR_PLAYER_ACTION,  # player 0 does his first action
+            HasAction.NO_ACTION_POSSIBLE,  # player 0 has no more actions, turn passes to player 1
+            HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his first action
+            HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his second action
+            HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his third action
+            HasAction.NO_ACTION_POSSIBLE,  # player 1 has no more actions, turn passes to player 2
+            HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his third action
+            HasAction.NO_ACTION_POSSIBLE,  # player 2 has no more actions, turn passes to player 3
+            HasAction.NO_ACTION_POSSIBLE,  # player 3 has no actions in this mock, so turn passes
+            HasAction.NO_ACTION_POSSIBLE,  # player 0 has no actions in this mock, so turn passes
+            HasAction.NO_ACTION_POSSIBLE,  # player 1 has no actions in this mock, so turn passes
+            HasAction.NO_ACTION_POSSIBLE,  # player 2 has no actions in this mock, so turn passes
+            # now there is no action possible for each player, we move to feed tribe state
+            ]
+        self.locations[Location.TOOL_MAKER].make_action_responses = [ActionResult.ACTION_DONE] * 5
+        self.feed_tribes[self.players[0]].is_fed_responses = [False]  # we only try to stop game
+        # by waiting for player 0 to pay
+        self.feed_tribes[self.players[0]].enough_responses = [False]
+
+        self.assertTrue(self.gpc.place_figures(self.players[0], Location.TOOL_MAKER, 1))
+        # we change phase to MakeAction
+        self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.MAKE_ACTION")
+        self.assertTrue(self.gpc.make_action(self.players[0], Location.TOOL_MAKER, [], []))
+        self.assertTrue(self.gpc.make_action(self.players[1], Location.TOOL_MAKER, [], []))
+        self.assertTrue(self.gpc.make_action(self.players[1], Location.TOOL_MAKER, [], []))
+        self.assertTrue(self.gpc.make_action(self.players[1], Location.TOOL_MAKER, [], []))
+        self.assertTrue(self.gpc.make_action(self.players[2], Location.TOOL_MAKER, [], []))
+
+        self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.FEED_TRIBE")
+
+    def test_new_round(self) -> None:
+        # this test tries to test more than one location
+        self.mock_setup(2, [Location.TOOL_MAKER, Location.BUILDING_TILE1])
+        for location in self.locations:
+            self.locations[location].place_responses = [True]
+            self.locations[location].try_place_responses = \
+                [HasAction.NO_ACTION_POSSIBLE] * 2 + [HasAction.WAITING_FOR_PLAYER_ACTION]
+            self.locations[location].try_make_responses = [
+                HasAction.NO_ACTION_POSSIBLE,  # to get rid of MakeAction phase
+                HasAction.NO_ACTION_POSSIBLE,
+            ]
+            # to get into another round
+            self.locations[location].new_turn_responses = [False]
+
+        for player in self.players:
+            # to get rid of FeedTribe phase:
+            self.feed_tribes[player].is_fed_responses = [True]
+        self.gpc.place_figures(self.players[0], Location.TOOL_MAKER, 1)
+        # now we should be again in place figures, because new_turn_responses are false
+        self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.PLACE_FIGURES")
+
+    def test_new_round_game_end(self) -> None:
+        self.mock_setup(2, [Location.TOOL_MAKER, Location.BUILDING_TILE1])
+        for location in self.locations:
+            self.locations[location].place_responses = [True]
+            self.locations[location].try_place_responses = \
+                [HasAction.NO_ACTION_POSSIBLE] * 2 + [HasAction.WAITING_FOR_PLAYER_ACTION]
+            self.locations[location].try_make_responses = [
+                HasAction.NO_ACTION_POSSIBLE,  # to get rid of MakeAction phase
+                HasAction.NO_ACTION_POSSIBLE,
+            ]
+            # to get into another round
+
+        self.locations[Location.TOOL_MAKER].new_turn_responses = [False]
+        self.locations[Location.BUILDING_TILE1].new_turn_responses = [True]
+
+        for player in self.players:
+            # to get rid of FeedTribe phase:
+            self.feed_tribes[player].is_fed_responses = [True]
+        self.gpc.place_figures(self.players[0], Location.TOOL_MAKER, 1)
+        # now we are in GameEnd phase, because BUILDING_TILE1 returned True for in new round
+        self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.GAME_END")
