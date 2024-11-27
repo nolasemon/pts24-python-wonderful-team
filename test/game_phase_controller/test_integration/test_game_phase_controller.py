@@ -170,6 +170,7 @@ class GamePhaseControllerIntegration(unittest.TestCase):
             HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his first action
             HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his second action
             HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his third action
+            HasAction.AUTOMATIC_ACTION_DONE,  # player 1 has done automatic action, he can do more
             HasAction.NO_ACTION_POSSIBLE,  # player 1 has no more actions, turn passes to player 2
             HasAction.WAITING_FOR_PLAYER_ACTION,  # player 1 does his third action
             HasAction.NO_ACTION_POSSIBLE,  # player 2 has no more actions, turn passes to player 3
