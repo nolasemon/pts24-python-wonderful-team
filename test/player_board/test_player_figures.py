@@ -1,8 +1,8 @@
-import unittest
-from stone_age.player_board.player_figures import PlayerFigures
-
 import json
+import unittest
+
 from typing import Any
+from stone_age.player_board.player_figures import PlayerFigures
 
 
 class PlayerFiguresUnit(unittest.TestCase):
