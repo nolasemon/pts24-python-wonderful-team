@@ -1,11 +1,18 @@
+import json
+from typing import Any
+
+
 class PlayerFigures:
 
-    def __init__(self) -> None:
-        self._total_figures: int = 0
-        self._figures: int = 0
+    def __init__(self, figures_start: int = 5, figures_maximum: int = 10) -> None:
+        assert 0 <= figures_start <= figures_maximum and figures_maximum > 0
+
+        self._figures_maximum = figures_maximum
+        self._total_figures: int = figures_start
+        self._figures: int = figures_start
 
     def add_new_figure(self) -> bool:
-        if 0 <= self.get_total_figures < 10:
+        if 0 <= self.get_total_figures < self._figures_maximum:
             self._total_figures += 1
             self._figures += 1
             return True
@@ -29,4 +36,8 @@ class PlayerFigures:
             self._figures = self.get_total_figures
 
     def state(self) -> str:
-        return f"Actual figures count: {self._figures},\nTotal figures: {self.get_total_figures}"
+        state: Any = {
+            "figures on player board": self._figures,
+            "total figures": self._total_figures,
+        }
+        return json.dumps(state)
