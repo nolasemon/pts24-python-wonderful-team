@@ -28,7 +28,8 @@ class TestNewRoundState(unittest.TestCase):
             Location.CIVILISATION_CARD1: LocationMock(False),
             Location.FIELD: LocationMock(False)
         }
-        new_round_state = NewRoundState(places, NewTurnFake())
+        new_round_state = NewRoundState(
+            places, {PlayerOrder(1, 4): NewTurnFake()})
         player = PlayerOrder(1, 1)
         self.assertEqual(HasAction.AUTOMATIC_ACTION_DONE,
                          new_round_state.try_to_make_automatic_action(player))
@@ -39,7 +40,8 @@ class TestNewRoundState(unittest.TestCase):
             Location.CIVILISATION_CARD1: LocationMock(True),
             Location.FIELD: LocationMock(False)
         }
-        new_round_state = NewRoundState(places, NewTurnFake())
+        new_round_state = NewRoundState(
+            places, {PlayerOrder(1, 4): NewTurnFake()})
         player = PlayerOrder(1, 1)
         self.assertEqual(HasAction.NO_ACTION_POSSIBLE,
                          new_round_state.try_to_make_automatic_action(player))
@@ -49,7 +51,8 @@ class TestNewRoundState(unittest.TestCase):
             Location.HUT: LocationMock(False),
             Location.CIVILISATION_CARD1: LocationMock(True),
         }
-        new_round_state = NewRoundState(places, NewTurnFake())
+        new_round_state = NewRoundState(
+            places, {PlayerOrder(1, 4): NewTurnFake()})
         player = PlayerOrder(1, 1)
         self.assertEqual(ActionResult.FAILURE,
                          new_round_state.do_not_feed_this_turn(player))
