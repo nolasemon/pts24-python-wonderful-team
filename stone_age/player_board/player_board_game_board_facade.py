@@ -7,33 +7,14 @@ from stone_age.simple_types import Effect, EndOfGameEffect
 
 class PlayerBoardGameBoardFacade(InterfacePlayerBoardGameBoard, InterfaceNewTurn, InterfaceFeedTribe):
 
-    _interface_player_board_gameboard: InterfacePlayerBoardGameBoard
-    _interface_new_turn: InterfaceNewTurn
-    _interface_feed_tribe: InterfaceFeedTribe
-
     def __init__(self, player_board_config: PlayerBoardConfig) -> None:
         assert isinstance(player_board_config, PlayerBoardConfig)
 
         self._player_board = PlayerBoard(player_board_config)
-        self._interface_player_board_gameboard = InterfacePlayerBoardGameBoard()
-        self._interface_new_turn = InterfaceNewTurn()
-        self._interface_feed_tribe = InterfaceFeedTribe()
 
     @property
     def player_board(self) -> PlayerBoard:
         return self._player_board
-
-    @property
-    def interface_feed_tribe(self) -> InterfaceFeedTribe:
-        return self._interface_feed_tribe
-
-    @property
-    def interface_new_turn(self) -> InterfaceNewTurn:
-        return self._interface_new_turn
-
-    @property
-    def interface_player_board_gameboard(self) -> InterfacePlayerBoardGameBoard:
-        return self._interface_player_board_gameboard
 
     def give_effect(self, stuff: List[Effect]) -> None:
         assert all(isinstance(item, Effect) for item in stuff)
@@ -94,7 +75,7 @@ class PlayerBoardGameBoardFacade(InterfacePlayerBoardGameBoard, InterfaceNewTurn
         return self._player_board._fed_status.feed_tribe(resources)
 
     def do_not_feed_this_turn(self) -> bool:
-        pass
+        return self.is_tribe_fed()
 
     def is_tribe_fed(self) -> bool:
         return self._player_board._fed_status.is_tribe_fed()
