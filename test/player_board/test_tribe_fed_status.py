@@ -43,7 +43,8 @@ class TestTribeFedStatus(unittest.TestCase):
         for _ in range(100):
             self.fed_status.add_field()
         s3: Any = json.loads(self.fed_status.state())
-        self.assertEqual(s3, {"tribe fed": False, "fields": 10})
+        self.assertEqual(
+            s3, {"tribe fed": False, "fields": TribeFedStatus.MAX_FIELDS})
 
     def test_feed_if_enough_food_success(self) -> None:
         self.resources_and_food.take_resources([Effect.FOOD] * 10)
@@ -123,7 +124,8 @@ class TestTribeFedStatus(unittest.TestCase):
         self.assertTrue(self.fed_status.feed_tribe([Effect.CLAY, Effect.GOLD]))
         self.assertFalse(self.resources_and_food.has_resources([Effect.FOOD]))
         s: Any = json.loads(self.fed_status.state())
-        self.assertEqual(s, {"tribe fed": True, "fields": 10})
+        self.assertEqual(
+            s, {"tribe fed": True, "fields": TribeFedStatus.MAX_FIELDS})
 
     def test_surplus_food(self) -> None:
         for _ in range(5):

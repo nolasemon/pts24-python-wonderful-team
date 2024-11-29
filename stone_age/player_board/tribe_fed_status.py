@@ -8,6 +8,8 @@ from stone_age.player_board.player_figures import PlayerFigures
 
 
 class TribeFedStatus(InterfaceGetState):
+    MAX_FIELDS: int = 11
+
     def __init__(
         self,
         resources_and_food: PlayerResourcesAndFood,
@@ -22,9 +24,10 @@ class TribeFedStatus(InterfaceGetState):
         self._new_fields: int = 0
 
     def add_field(self) -> None:
-        if self._fields < 10:
-            self._fields += 1
-            self._new_fields += 1
+        if self._fields >= self.MAX_FIELDS:
+            return
+        self._fields += 1
+        self._new_fields += 1
 
     def new_turn(self) -> None:
         self._tribe_fed = False
