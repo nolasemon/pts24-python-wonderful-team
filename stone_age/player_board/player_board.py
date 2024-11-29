@@ -30,6 +30,26 @@ class PlayerBoard(InterfaceGetState):
         self._figures = config.figures
         self._tools = config.tools
 
+    @property
+    def cards(self) -> PlayerCivilisationCards:
+        return self._cards
+
+    @property
+    def resources_and_food(self) -> PlayerResourcesAndFood:
+        return self._resources_and_food
+
+    @property
+    def fed_status(self) -> TribeFedStatus:
+        return self._fed_status
+
+    @property
+    def figures(self) -> PlayerFigures:
+        return self._figures
+
+    @property
+    def tools(self) -> PlayerTools:
+        return self._tools
+
     def add_points(self, points: int) -> None:
         self._points += points
 
