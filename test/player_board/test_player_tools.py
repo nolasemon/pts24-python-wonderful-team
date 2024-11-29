@@ -236,6 +236,18 @@ class TestPlayerTools(unittest.TestCase):
         self.assertEqual(2, p1.use_tool(3))
         self.assertEqual(None, p1.use_tool(3))
 
+    def test_after_review(self) -> None:
+        p1 = PlayerTools()
+        for _ in range(9):
+            p1.add_tool()
+        s1: Any = json.loads(p1.state())
+        self.assertEqual(s1["tools strength"], [3, 3, 3])
+
+        p1.add_single_use_tool(2)
+        p1.add_tool()
+        s2: Any = json.loads(p1.state())
+        self.assertEqual(s2["tools strength"], [4, 3, 3])
+
 
 if __name__ == '__main__':
     unittest.main()

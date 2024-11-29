@@ -14,10 +14,10 @@ class PlayerTools(InterfaceGetState):
         self._used_tools = [False for _ in range(3)]
 
     def add_tool(self) -> None:
-        minimal_tool: int = min(self._tools)
+        minimal_tool: int = min(self._tools[:3])
         minimal_tool_index: int = self._tools.index(minimal_tool)
 
-        if minimal_tool < 4 and minimal_tool_index < 3:
+        if minimal_tool < 4:
             self._tools[minimal_tool_index] += 1
 
     def add_single_use_tool(self, strength: int) -> None:
