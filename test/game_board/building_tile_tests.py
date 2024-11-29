@@ -68,7 +68,7 @@ class TestBuildingTile(unittest.TestCase):
         self.assertEqual(result, HasAction.NO_ACTION_POSSIBLE)
 
     def test_try_to_place_figures_already_occupied(self) -> None:
-        player: Player = Player(PlayerOrder(0, 2), InterfacePlayerBoardGameBoard())
+        player: Player = Player(PlayerOrder(0, 2), MockInterfacePlayerBoardGameBoard())
         assert self.building_tile is not None
         self.building_tile.figures = player.player_order.forward()
         result: HasAction = self.building_tile.try_to_place_figures(player, count=1)
@@ -77,14 +77,14 @@ class TestBuildingTile(unittest.TestCase):
     def test_try_to_place_figures_no_cards(self) -> None:
         self.building_tile = BuildingTile([])
         assert self.building_tile is not None
-        player: Player = Player(PlayerOrder(2, 3), InterfacePlayerBoardGameBoard())
+        player: Player = Player(PlayerOrder(2, 3), MockInterfacePlayerBoardGameBoard())
         result: HasAction = self.building_tile.try_to_place_figures(player, count=1)
         self.assertEqual(result, HasAction.NO_ACTION_POSSIBLE)
 
     def test_make_action_success(self) -> None:
         player: Player = Player(PlayerOrder(0, 2), MockInterfacePlayerBoardGameBoard())
         input_resources = [Effect.CLAY, Effect.GOLD, Effect.CLAY, Effect.GOLD]
-        output_resources = [Effect.CLAY, Effect.GOLD, Effect.CLAY, Effect.GOLD]
+        output_resources = []
         self.building_tile.place_figures(player, 1)
         result = self.building_tile.make_action(player, input_resources, output_resources)
         self.assertEqual(result, ActionResult.ACTION_DONE)
@@ -102,7 +102,7 @@ class TestBuildingTile(unittest.TestCase):
         assert self.building_tile is not None
         self.building_tile.figures = player.player_order.forward()
         input_resources = [Effect.CLAY, Effect.GOLD, Effect.STONE]
-        output_resources = [Effect.CLAY, Effect.GOLD, Effect.STONE]
+        output_resources = []
         result = self.building_tile.make_action(player, input_resources, output_resources)
         self.assertEqual(result, ActionResult.FAILURE)
 

@@ -44,6 +44,7 @@ class BuildingTile(InterfaceFigureLocationInternal):
                     output_resources: Iterable[Effect]) -> ActionResult:
         if self.figures is None:
             return ActionResult.FAILURE
+        if output_resources: return ActionResult.FAILURE
         card: Union[simple_building.SimpleBuilding,
         arbitrary_building.ArbitraryBuilding,
         variable_building.VariableBuilding] = self.cards[-1]
