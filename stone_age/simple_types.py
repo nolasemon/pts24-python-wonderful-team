@@ -97,6 +97,7 @@ class HasAction(Enum):
     AUTOMATIC_ACTION_DONE = 2
     NO_ACTION_POSSIBLE = 3
 
+
 class EndOfGameEffect(IntEnum):
     FARMER = 1
     TOOLMAKER = 2
