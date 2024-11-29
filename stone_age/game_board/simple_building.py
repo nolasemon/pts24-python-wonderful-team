@@ -1,4 +1,5 @@
 from typing import Iterable, Optional
+import json
 from stone_age.simple_types import Effect
 from stone_age.game_board. interfaces import Building
 
@@ -20,3 +21,9 @@ class SimpleBuilding(Building):
     @property
     def get_required_resources(self) -> Iterable[Effect]:
         return self._required_resources              # method for testing
+
+    def state(self) -> str:
+        d: dict[str, str] = {"Type": "SimpleBuilding",
+            "ResourcesRequired" : " ".join(f"{x}" for x in self._required_resources)
+                             if self._required_resources else "[]"}
+        return json.dumps(d)
