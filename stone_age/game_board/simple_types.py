@@ -1,6 +1,8 @@
+from typing import Iterable
+
 from stone_age.simple_types import PlayerOrder
 from stone_age.interfaces import InterfacePlayerBoardGameBoard
-
+from stone_age.simple_types import EndOfGameEffect, ImmediateEffect
 
 class Player:
     _player_order: PlayerOrder
@@ -24,3 +26,11 @@ class Player:
         if not isinstance(other, Player):
             return NotImplemented
         return self._player_order == other.player_order and self._player_board == other.player_board
+
+
+class CivilizationCard:
+
+    def __init__(self, effect_type: Iterable[ImmediateEffect],
+                 end_of_game_eff: Iterable[EndOfGameEffect]) -> None:
+        self.immediate_effect: list[ImmediateEffect] = list(effect_type)
+        self.end_of_game_effect: list[EndOfGameEffect] = list(end_of_game_eff)
