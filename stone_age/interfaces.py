@@ -70,6 +70,7 @@ class InterfacePlayerBoardGameBoard:
         assert False
 
     def give_figure(self) -> None:
+        """Adds new figure after successful HUT action."""
         assert False
 
     def take_resourses(self, stuff: Iterable[Effect]) -> bool:
