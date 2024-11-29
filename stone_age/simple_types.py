@@ -112,16 +112,16 @@ class EndOfGameEffect(IntEnum):
     WEAVING = 12
 
 class ImmediateEffect(IntEnum):
-    ThrowWood = 1
-    ThrowClay = 2
-    ThrowStone = 3
-    ThrowGold = 4
-    Point = 5
-    Wood = 6
-    Clay = 7
-    Stone = 8
-    Gold = 9
-    Card = 10
-    ArbitraryResource = 11
-    Food = 12
-    AllPlayersTakeReward = 13
+    THROWWOOD = 1
+    THROWCLAY = 2
+    THROWSTONE = 3
+    THROWGOLD = 4
+    POINT = 5
+    WOOD = 6
+    CLAY = 7
+    STONE = 8
+    GOLD = 9
+    CARD = 10
+    ARBITRARYRESOURCE = 11
+    FOOD = 12
+    ALLPLAYERSTAKEREWARD = 13
