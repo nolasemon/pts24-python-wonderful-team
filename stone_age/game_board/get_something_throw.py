@@ -1,14 +1,20 @@
-from typing import List
-from stone_age.simple_types import Effect
+from __future__ import annotations
+from typing import Iterable
+from stone_age.simple_types import Effect, ActionResult
+from stone_age.game_board.simple_types import Player
+from stone_age.game_board.interfaces import EvaluateCivilizationCardImmediateEffect
+from stone_age.game_board.interfaces import InterfaceCurrentThrow
 
 
-class GetSomethingThrow:
-    def __init__(self, resource: List[Effect]):
-        self._resource = resource
+class GetSomethingThrow(EvaluateCivilizationCardImmediateEffect):
+    def __init__(self, current_throw: InterfaceCurrentThrow) -> None:
+        self._current_throw = current_throw
 
-    @property
-    def resource(self) -> List[Effect]:
-        return self._resource
+    def perform_effect(self, player: Player, choice: Iterable[Effect]) -> ActionResult:
+        try:
+            effect = next(iter(choice))
+        except StopIteration:
+            return ActionResult.FAILURE
 
-    def state(self) -> str:
-        return f"Resources to get from throw: {self._resource}"
+        self._current_throw.initiate(player, effect, 2)
+        return ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE

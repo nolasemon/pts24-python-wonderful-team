@@ -1,56 +1,21 @@
-from typing import List
-from stone_age.simple_types import Effect, HasAction, PlayerOrder
+from __future__ import annotations
+from typing import List, Iterable
+from stone_age.simple_types import Effect, ActionResult
+from stone_age.game_board.simple_types import Player
+from stone_age.game_board.reward_menu import RewardMenu
+from stone_age.game_board.interfaces import EvaluateCivilizationCardImmediateEffect, InterfaceThrow
 
 
-class AllPlayersTakeReward:
-    def __init__(self) -> None:
-        self._menu: List[Effect] = []
-        self._players: List[PlayerOrder] = []
-        self._current_player_index: int = 0
+class AllPlayersTakeReward(EvaluateCivilizationCardImmediateEffect):
+    def __init__(self, reward_menu: RewardMenu, throw: InterfaceThrow) -> None:
+        self._reward_menu = reward_menu
+        self._throw = throw
 
-    @property
-    def menu(self) -> List[Effect]:
-        return self._menu
+    def perform_effect(self, player: Player, choice: Iterable[Effect]) -> ActionResult:
+        number_of_players = player.player_order.players
+        rewards: List[Effect] = []
+        for _ in range(number_of_players):
+            rewards.append(Effect(self._throw.throw(1)[0]))
 
-    @property
-    def players(self) -> List[PlayerOrder]:
-        return self._players
-
-    @property
-    def current_player_index(self) -> int:
-        return self._current_player_index
-
-    def initiate(self, menu: List[Effect], players: List[PlayerOrder]) -> None:
-        self._menu = menu.copy()
-        self._players = players
-        self._current_player_index = 0
-
-    def try_make_action(self, player: PlayerOrder) -> HasAction:
-        if not self._menu:
-            return HasAction.NO_ACTION_POSSIBLE
-
-        if player != self._players[self._current_player_index]:
-            return HasAction.NO_ACTION_POSSIBLE
-
-        return HasAction.WAITING_FOR_PLAYER_ACTION
-
-    def take_reward(self, player: PlayerOrder, reward: Effect) -> bool:
-        if not self._menu:
-            return False
-
-        if player != self._players[self._current_player_index]:
-            return False
-
-        if reward not in self._menu:
-            return False
-
-        self._menu.remove(reward)
-        self._current_player_index = (
-            self._current_player_index + 1) % len(self._players)
-        return True
-
-    def state(self) -> str:
-        return (
-            f"Menu: {self._menu}, Players: {self._players}, "
-            f"Current Player Index: {self._current_player_index}"
-        )
+        self._reward_menu.initiate(rewards)
+        return ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD
