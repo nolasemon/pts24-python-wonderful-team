@@ -110,3 +110,18 @@ class EndOfGameEffect(IntEnum):
     POTTERY = 10
     TRANSPORT = 11
     WEAVING = 12
+
+class ImmediateEffect(IntEnum):
+    ThrowWood = 1
+    ThrowClay = 2
+    ThrowStone = 3
+    ThrowGold = 4
+    Point = 5
+    Wood = 6
+    Clay = 7
+    Stone = 8
+    Gold = 9
+    Card = 10
+    ArbitraryResource = 11
+    Food = 12
+    AllPlayersTakeReward = 13

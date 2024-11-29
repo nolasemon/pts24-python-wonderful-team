@@ -99,3 +99,20 @@ class InterfacePlayerBoardGameBoard:
     def use_tool(self, idx: int) -> Optional[int]:
         assert isinstance(idx, int)
         return 0
+
+class InterfaceToolUse:
+
+    def __init__(self) -> None:
+        pass
+
+    def use_tool(self, idx: int) -> bool:
+        assert isinstance(idx, int)
+        return False
+
+    def can_use_tool(self, idx: int) -> bool:
+        assert isinstance(idx, int)
+        return False
+
+    def finish_using_tool(self, idx: int) -> bool:
+        assert isinstance(idx, int)
+        return False

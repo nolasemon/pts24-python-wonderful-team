@@ -62,7 +62,6 @@ class BuildingTile(InterfaceFigureLocationInternal):
             return False
         if self.figures is None:
             return False
-        player.player_board.give_figure()
         self.figures = None
         return True
 
