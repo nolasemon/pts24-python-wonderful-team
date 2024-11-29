@@ -1,4 +1,7 @@
 import unittest
+import json
+
+from typing import Any
 from stone_age.player_board.player_tools import PlayerTools
 
 
@@ -10,28 +13,37 @@ class TestPlayerTools(unittest.TestCase):
         p1.add_tool()
         p1.add_tool()
 
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused", p1.state())
+        state_start: Any = json.loads(p1.state())
+        self.assertEqual(state_start, {"tools strength": [1, 1, 0],
+                                       "used tools": [False, False, False],
+                                       "single-use tools": []})
         self.assertFalse(p1.has_sufficient_tools(11))
 
         for _ in range(4):
             p1.add_tool()
 
-        self.assertIn(
-            "Tool 1: 2, unused\nTool 2: 2, unused\nTool 3: 2, unused", p1.state())
+        state_after_adding1: Any = json.loads(p1.state())
+        self.assertEqual(state_after_adding1, {"tools strength": [2, 2, 2],
+                                               "used tools": [False, False, False],
+                                               "single-use tools": []})
         self.assertFalse(p1.has_sufficient_tools(11))
 
         for _ in range(4):
             p1.add_tool()
 
-        self.assertIn(
-            "Tool 1: 4, unused\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
+        state_after_adding2: Any = json.loads(p1.state())
+        self.assertEqual(state_after_adding2, {"tools strength": [4, 3, 3],
+                                               "used tools": [False, False, False],
+                                               "single-use tools": []})
         self.assertFalse(p1.has_sufficient_tools(11))
 
         for _ in range(3):
             p1.add_tool()
 
-        self.assertIn(
-            "Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused", p1.state())
+        state_after_adding3: Any = json.loads(p1.state())
+        self.assertEqual(state_after_adding3, {"tools strength": [4, 4, 4],
+                                               "used tools": [False, False, False],
+                                               "single-use tools": []})
         self.assertTrue(p1.has_sufficient_tools(11))
 
     def test_figures_taking(self) -> None:
@@ -43,15 +55,21 @@ class TestPlayerTools(unittest.TestCase):
         self.assertTrue(p1.has_sufficient_tools(7))
         p1.use_tool(0)
         self.assertFalse(p1.has_sufficient_tools(7))
-        self.assertIn(
-            "Tool 1: 4, used\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
+        state_after_use1: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use1, {"tools strength": [4, 3, 3],
+                                            "used tools": [True, False, False],
+                                            "single-use tools": []})
         p1.use_tool(1)
         p1.use_tool(2)
-        self.assertIn(
-            "Tool 1: 4, used\nTool 2: 3, used\nTool 3: 3, used", p1.state())
+        state_after_use2: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use2, {"tools strength": [4, 3, 3],
+                                            "used tools": [True, True, True],
+                                            "single-use tools": []})
         p1.add_tool()
-        self.assertIn(
-            "Tool 1: 4, used\nTool 2: 4, used\nTool 3: 3, used", p1.state())
+        state_after_add: Any = json.loads(p1.state())
+        self.assertEqual(state_after_add, {"tools strength": [4, 4, 3],
+                                           "used tools": [True, True, True],
+                                           "single-use tools": []})
         self.assertFalse(p1.has_sufficient_tools(4))
 
     def test_new_turn(self) -> None:
@@ -62,40 +80,60 @@ class TestPlayerTools(unittest.TestCase):
 
         p1.use_tool(0)
         p1.use_tool(1)
-        self.assertIn(
-            "Tool 1: 4, used\nTool 2: 3, used\nTool 3: 3, unused", p1.state())
+
+        state_after_use: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use, {"tools strength": [4, 3, 3],
+                                           "used tools": [True, True, False],
+                                           "single-use tools": []})
         p1.new_turn()
-        self.assertIn(
-            "Tool 1: 4, unused\nTool 2: 3, unused\nTool 3: 3, unused", p1.state())
+        state_new_turn: Any = json.loads(p1.state())
+        self.assertEqual(state_new_turn, {"tools strength": [4, 3, 3],
+                                          "used tools": [False, False, False],
+                                          "single-use tools": []})
 
     def test_single_use_tool(self) -> None:
         p1 = PlayerTools()
 
         p1.add_single_use_tool(3)
-        self.assertIn("Single-use tool: 3, unused", p1.state())
+        state_single_use1: Any = json.loads(p1.state())
+        self.assertEqual(state_single_use1, {"tools strength": [0, 0, 0],
+                                             "used tools": [False, False, False],
+                                             "single-use tools": [3]})
         p1.add_tool()
         p1.add_tool()
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
-                      "Single-use tool: 3, unused", p1.state())
+        state_add_tools1: Any = json.loads(p1.state())
+        self.assertEqual(state_add_tools1, {"tools strength": [1, 1, 0],
+                                            "used tools": [False, False, False],
+                                            "single-use tools": [3]})
         p1.add_single_use_tool(2)
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
-                      "Single-use tool: 3, unused\nSingle-use tool: 2, unused", p1.state())
+        state_single_use2: Any = json.loads(p1.state())
+        self.assertEqual(state_single_use2, {"tools strength": [1, 1, 0],
+                                             "used tools": [False, False, False],
+                                             "single-use tools": [3, 2]})
         self.assertTrue(p1.has_sufficient_tools(5))
         p1.use_tool(3)
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
-                      "Single-use tool: 2, unused", p1.state())
+        state_after_use: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use, {"tools strength": [1, 1, 0],
+                                           "used tools": [False, False, False],
+                                           "single-use tools": [2]})
         self.assertFalse(p1.has_sufficient_tools(5))
         p1.add_tool()
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
-                      "Tool 3: 1, unused\nSingle-use tool: 2, unused", p1.state())
+        state_add_tools2: Any = json.loads(p1.state())
+        self.assertEqual(state_add_tools2, {"tools strength": [1, 1, 1],
+                                            "used tools": [False, False, False],
+                                            "single-use tools": [2]})
         p1.new_turn()
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
-                      "Tool 3: 1, unused\nSingle-use tool: 2, unused", p1.state())
+        state_new_turn: Any = json.loads(p1.state())
+        self.assertEqual(state_new_turn, {"tools strength": [1, 1, 1],
+                                          "used tools": [False, False, False],
+                                          "single-use tools": [2]})
         p1.add_single_use_tool(1)
         p1.add_single_use_tool(5)
         p1.add_single_use_tool(-1)
-        self.assertIn("Tool 1: 1, unused\nTool 2: 1, unused\n"
-                      "Tool 3: 1, unused\nSingle-use tool: 2, unused", p1.state())
+        state_single_use3: Any = json.loads(p1.state())
+        self.assertEqual(state_single_use3, {"tools strength": [1, 1, 1],
+                                             "used tools": [False, False, False],
+                                             "single-use tools": [2]})
 
     def test_add_too_much(self) -> None:
         p1 = PlayerTools()
@@ -103,24 +141,36 @@ class TestPlayerTools(unittest.TestCase):
         for _ in range(100):
             p1.add_tool()
 
-        self.assertIn(
-            "Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused", p1.state())
+        state_add_too_much: Any = json.loads(p1.state())
+        self.assertEqual(state_add_too_much, {"tools strength": [4, 4, 4],
+                                              "used tools": [False, False, False],
+                                              "single-use tools": []})
         p1.add_single_use_tool(2)
         p1.add_single_use_tool(3)
         p1.add_single_use_tool(4)
-        self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused\n"
-                      "Single-use tool: 2, unused\nSingle-use tool: 3, unused\n"
-                      "Single-use tool: 4, unused", p1.state())
+        state_add_singles1: Any = json.loads(p1.state())
+        self.assertEqual(state_add_singles1, {"tools strength": [4, 4, 4],
+                                              "used tools": [False, False, False],
+                                              "single-use tools": [2, 3, 4]})
         p1.add_tool()
         p1.add_tool()
         p1.add_single_use_tool(2)
-        self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused\n"
-                      "Single-use tool: 2, unused\nSingle-use tool: 3, unused\n"
-                      "Single-use tool: 4, unused\nSingle-use tool: 2, unused", p1.state())
+        state_add_singles2: Any = json.loads(p1.state())
+        self.assertEqual(state_add_singles2, {"tools strength": [4, 4, 4],
+                                              "used tools": [False, False, False],
+                                              "single-use tools": [2, 3, 4, 2]})
         p1.use_tool(4)
         p1.use_tool(5)
-        self.assertIn("Tool 1: 4, unused\nTool 2: 4, unused\nTool 3: 4, unused\n"
-                      "Single-use tool: 2, unused\nSingle-use tool: 4, unused", p1.state())
+        state_after_use1: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use1, {"tools strength": [4, 4, 4],
+                                            "used tools": [False, False, False],
+                                            "single-use tools": [2, 4]})
+        p1.use_tool(3)
+        p1.use_tool(3)
+        state_after_use2: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use2, {"tools strength": [4, 4, 4],
+                                            "used tools": [False, False, False],
+                                            "single-use tools": []})
 
     def test_use_tools(self) -> None:
         p1 = PlayerTools()
@@ -163,6 +213,40 @@ class TestPlayerTools(unittest.TestCase):
         self.assertFalse(p1.has_sufficient_tools(12))
         p1.new_turn()
         self.assertTrue(p1.has_sufficient_tools(12))
+
+    def test_use_two_times(self) -> None:
+        p1 = PlayerTools()
+
+        for _ in range(12):
+            p1.add_tool()
+
+        p1.use_tool(0)
+        p1.use_tool(1)
+        p1.use_tool(2)
+
+        state_after_use1: Any = json.loads(p1.state())
+        self.assertEqual(state_after_use1, {"tools strength": [4, 4, 4],
+                                            "used tools": [True, True, True],
+                                            "single-use tools": []})
+
+        self.assertEqual(None, p1.use_tool(1))
+        p1.new_turn()
+        self.assertEqual(4, p1.use_tool(1))
+        p1.add_single_use_tool(2)
+        self.assertEqual(2, p1.use_tool(3))
+        self.assertEqual(None, p1.use_tool(3))
+
+    def test_after_review(self) -> None:
+        p1 = PlayerTools()
+        for _ in range(9):
+            p1.add_tool()
+        s1: Any = json.loads(p1.state())
+        self.assertEqual(s1["tools strength"], [3, 3, 3])
+
+        p1.add_single_use_tool(2)
+        p1.add_tool()
+        s2: Any = json.loads(p1.state())
+        self.assertEqual(s2["tools strength"], [4, 3, 3])
 
 
 if __name__ == '__main__':
