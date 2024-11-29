@@ -58,7 +58,6 @@ class ToolMakerHutFields:
         if not self.can_make_action_on_tool_maker(player):
             return False
         player.player_board.give_effect([Effect.TOOL])
-        player.player_board.give_figure()
         self.tool_maker_figures.clear()
         return True
 
@@ -93,8 +92,6 @@ class ToolMakerHutFields:
         if not self.can_make_action_on_hut(player):
             return False
         player.player_board.give_figure()
-        player.player_board.give_figure()
-        player.player_board.give_figure()
         self.hut_figures.clear()
         return True
 
@@ -128,7 +125,6 @@ class ToolMakerHutFields:
         if not self.can_make_action_on_fields(player):
             return False
         player.player_board.give_effect([Effect.FIELD])
-        player.player_board.give_figure()
         self.fields_figures.clear()
         return True
 
