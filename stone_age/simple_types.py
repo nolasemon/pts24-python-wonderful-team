@@ -31,6 +31,9 @@ class PlayerOrder:
         assert self._players == other.players
         return self._order == other.order
 
+    def __hash__(self) -> int:
+        return hash((self.order, self.players))
+
 
 class Location(Enum):
     TOOL_MAKER = 1
@@ -50,6 +53,9 @@ class Location(Enum):
     BUILDING_TILE3 = 23
     BUILDING_TILE4 = 24
 
+    def __lt__(self, other: Location) -> bool:
+        return self.value < other.value
+
 
 class Effect(IntEnum):
     FOOD = 1
@@ -63,6 +69,7 @@ class Effect(IntEnum):
     ONE_TIME_TOOL2 = 12
     ONE_TIME_TOOL3 = 13
     ONE_TIME_TOOL4 = 14
+    POINT = 15
 
     @staticmethod
     def is_resource(effect: Effect) -> bool:
@@ -98,9 +105,30 @@ class HasAction(Enum):
     NO_ACTION_POSSIBLE = 3
 
 
+class ImmediateEffect(Enum):
+    THROW_WOOD = 1
+    THROW_CLAY = 2
+    THROW_STONE = 3
+    THROW_GOLD = 4
+    POINT = 5
+    WOOD = 6
+    CLAY = 7
+    STONE = 8
+    GOLD = 9
+    CARD = 10
+    ARBITRARY_RESOURCE = 11
+    FOOD = 12
+    ALL_PLAYERS_TAKE_REWARD = 13
+    TOOL = 14
+    ONE_TIME_TOOL2 = 15
+    ONE_TIME_TOOL3 = 16
+    ONE_TIME_TOOL4 = 17
+    FIELD = 18
+
+
 class EndOfGameEffect(IntEnum):
     FARMER = 1
-    TOOLMAKER = 2
+    TOOL_MAKER = 2
     BUILDER = 3
     SHAMAN = 4
     MEDICINE = 5
@@ -112,17 +140,20 @@ class EndOfGameEffect(IntEnum):
     TRANSPORT = 11
     WEAVING = 12
 
-class ImmediateEffect(IntEnum):
-    THROWWOOD = 1
-    THROWCLAY = 2
-    THROWSTONE = 3
-    THROWGOLD = 4
-    POINT = 5
-    WOOD = 6
-    CLAY = 7
-    STONE = 8
-    GOLD = 9
-    CARD = 10
-    ARBITRARYRESOURCE = 11
-    FOOD = 12
-    ALLPLAYERSTAKEREWARD = 13
+
+class CivilisationCard:
+    _immediate_effects: list[ImmediateEffect]
+    _end_of_game_effects: list[EndOfGameEffect]
+
+    def __init__(self, immediate_effects: list[ImmediateEffect],
+                 end_of_game_effects: list[EndOfGameEffect]):
+        self._immediate_effects = immediate_effects
+        self._end_of_game_effects = end_of_game_effects
+
+    @property
+    def immediate_effects(self) -> list[ImmediateEffect]:
+        return self._immediate_effects
+
+    @property
+    def end_of_game_effects(self) -> list[EndOfGameEffect]:
+        return self._end_of_game_effects
