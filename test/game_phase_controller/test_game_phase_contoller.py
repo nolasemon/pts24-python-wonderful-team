@@ -301,6 +301,24 @@ class TestGamePhaseController(unittest.TestCase):
         self.assertTrue(self.make_all_players_take_a_reward_choice(1))
         self.check_state_string("GamePhase.MAKE_ACTION,0/1/None")
 
+    def test_no_tools_last_action(self) -> None:
+        self.mock_setup("pDNN mW")
+        self.assertTrue(self.place_figures(0))
+        self.check_state_string("GamePhase.MAKE_ACTION,0/0/None")
+
+        self.mock_setup("mT wN mNN fW")
+        self.assertTrue(self.make_action(0))
+        self.check_state_string("GamePhase.FEED_TRIBE,0/0/None")
+
+    def test_all_players_take_a_reward_last_action(self) -> None:
+        self.mock_setup("pDNN mW")
+        self.assertTrue(self.place_figures(0))
+        self.check_state_string("GamePhase.MAKE_ACTION,0/0/None")
+
+        self.mock_setup("mR aN mNN fW")
+        self.assertTrue(self.make_action(0))
+        self.check_state_string("GamePhase.FEED_TRIBE,0/0/None")
+
 
 if __name__ == "__main__":
     unittest.main()
