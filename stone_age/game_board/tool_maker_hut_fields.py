@@ -34,8 +34,11 @@ class ToolMakerHutFields:
         return self._restriction
 
     def can_place_at_all(self) -> bool:
-        """With 2 and 3 players, only 2 of these locations may be occupied during a round:
-           tool maker, hut, and field"""
+        """
+        Always returns true when there isn't player restriction (there are 4 players)
+        With 2 and 3 players, only 2 of these locations may be occupied during a round:
+        tool maker, hut, and field
+        """
         if self.restriction == 4:
             return True
         is_tool_maker_occupied: bool = len(self.tool_maker_figures) > 0
@@ -51,9 +54,11 @@ class ToolMakerHutFields:
         return True
 
     def action_tool_maker(self, player: Player) -> bool:
+        """The tool maker location will be clear after performing the action"""
         if not self.can_make_action_on_tool_maker(player):
             return False
         player.player_board.give_effect([Effect.TOOL])
+        self.tool_maker_figures.clear()
         return True
 
     def can_place_on_tool_maker(self, player: Player) -> bool:
@@ -83,9 +88,11 @@ class ToolMakerHutFields:
         return True
 
     def action_hut(self, player: Player) -> bool:
-        if not self.can_place_on_hut(player):
+        """The hut location will be clear after performing the action"""
+        if not self.can_make_action_on_hut(player):
             return False
         player.player_board.give_figure()
+        self.hut_figures.clear()
         return True
 
     def can_place_on_hut(self, player: Player) -> bool:
@@ -114,9 +121,11 @@ class ToolMakerHutFields:
         return True
 
     def action_fields(self, player: Player) -> bool:
-        if not self.can_place_on_fields(player):
+        """Fields location will be clear after performing the action"""
+        if not self.can_make_action_on_fields(player):
             return False
         player.player_board.give_effect([Effect.FIELD])
+        self.fields_figures.clear()
         return True
 
     def can_place_on_fields(self, player: Player) -> bool:
@@ -137,12 +146,13 @@ class ToolMakerHutFields:
             return False
         return True
 
-    def new_turn(self) -> None:
-        """When all actions are done, figures are taken back on player boards,
-           so locations must be clear"""
-        self.tool_maker_figures.clear()
-        self.hut_figures.clear()
-        self.fields_figures.clear()
+    def new_turn(self) -> bool:
+        """
+        THIS IS NOT THE SAME new_turn() LIKE IN InterfaceFigureLocationInternal
+        Returns true if locations are clear and prepared for the new turn
+        """
+        return len(self.tool_maker_figures) == 0 and len(self.hut_figures) == 0 and\
+            len(self.fields_figures) == 0
 
     def state(self) -> str:
         state: Any = {
