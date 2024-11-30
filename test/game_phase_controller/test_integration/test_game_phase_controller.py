@@ -253,23 +253,31 @@ class GamePhaseControllerIntegration(unittest.TestCase):
         self.feed_tribes[self.players[0]].is_fed_responses = [False]
         self.feed_tribes[self.players[0]].enough_responses = [False]
 
-        self.tool_use.can_responses += [True, False] # first player can use tool once
-        self.tool_use.use_responses += [True] # first player uses tool
-        self.tool_use.can_responses += [True, True] # second player can use tools
-        self.tool_use.use_responses += [True] # but uses tool only once
-        self.tool_use.not_responses += [True]
+        self.tool_use.can_responses += [True, False] # first player can use tool once (1)
+        self.tool_use.use_responses += [True] # first player uses tool (2)
+        self.tool_use.can_responses += [True, True] # second player can use tools (3)
+        self.tool_use.use_responses += [True] # but uses tool only once (4)
+        self.tool_use.not_responses += [True] # second player finishes using tools (5)
 
         self.gpc.place_figures(self.players[0], Location.HUNTING_GROUNDS, 3)
+        # first player places figures and the game proceeds to MakeActionState
         self.gpc.make_action(self.players[0], Location.HUNTING_GROUNDS, [], [])
-
+        # this returns ACTION_DONE_WAIT_FOR_TOOL_USE changing the phase if the game
         self.assertEqual(json.loads(self.gpc.state())["game phase"],
                          "GamePhase.WAITING_FOR_TOOL_USE")
+        # gpc tries to make automatic actions in this phase, player0 can use tools (1),
+        # so WAITING_FOR_PLAYER_ACTION is returned
         self.assertTrue(self.gpc.use_tools(self.players[0], 1))
+        # player0 uses tool (2), now can not use any more tools so the game returns
+        # to MakeActionState, with player1 to make action
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.MAKE_ACTION")
         self.gpc.make_action(self.players[1],Location.HUNTING_GROUNDS, [], [])
-
+        # player1 makes action, ACTION_DONE_WAIT_FOR_TOOL_USE is returned,
+        # and can use tools (3) so it's GamePhase.WAITING_FOR_TOOL_USE again
         self.assertTrue(self.gpc.use_tools(self.players[1], 4))
+        # player1 uses tool (4), decides not to use one again (5)
         self.assertTrue(self.gpc.no_more_tools_this_throw(self.players[1]))
+        # no further actions can be done, next phase continues
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.FEED_TRIBE")
 
     def test_waiting_tool_use_more_players(self) -> None:
@@ -285,19 +293,27 @@ class GamePhaseControllerIntegration(unittest.TestCase):
         self.feed_tribes[self.players[0]].is_fed_responses = [False]
         self.feed_tribes[self.players[0]].enough_responses = [False]
 
-        self.tool_use.can_responses = [False, True] * 2
-        self.tool_use.use_responses = [True]
-        self.tool_use.not_responses = [True]
+        self.tool_use.can_responses = [False, True] * 2 # (1)
+        self.tool_use.use_responses = [True] # (2)
+        self.tool_use.not_responses = [True] # (3)
 
         self.gpc.place_figures(self.players[0], Location.HUNTING_GROUNDS, 2)
+        # figures are placed and game is now in MakeActionState
         self.gpc.make_action(self.players[0], Location.HUNTING_GROUNDS, [], [])
+        # this returns ACTION_DONE_WAIT_FOR_TOOL_USE, changing the game phase,
+        # but try_to_make_automatic_action returns NO_ACTION_POSSIBLE,
+        # because player0 cannot use tools (1)
         self.assertTrue(self.gpc.make_action(self.players[1], Location.HUNTING_GROUNDS, [], []))
+        # now player1 can use tools (1)
         self.assertEqual(json.loads(self.gpc.state())["game phase"],
                          "GamePhase.WAITING_FOR_TOOL_USE")
         self.assertFalse(self.gpc.make_action(self.players[1], Location.HUNTING_GROUNDS, [], []))
+        # cannot make action because of wrong GamePhase
         self.gpc.use_tools(self.players[1], 1)
+        # now player1 cannot use more tools (1),
+        # try_to_make_automatic_action returns NO_ACTION_POSSIBLE
         self.gpc.make_action(self.players[2], Location.HUNTING_GROUNDS, [], [])
-        self.assertFalse(self.gpc.use_tools(self.players[1], 0))
+        self.assertFalse(self.gpc.use_tools(self.players[1], 0)) # not this player's turn
         self.gpc.no_more_tools_this_throw(self.players[2])
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.FEED_TRIBE")
 
@@ -314,7 +330,8 @@ class GamePhaseControllerIntegration(unittest.TestCase):
             self.feed_tribes[player].is_fed_responses = [False] + [True]
             self.feed_tribes[player].enough_responses = [True]
 
-        # the first player places his figure(s) and the GPC automatically finishes the round
+        # the first player places his figure(s) and the GPC automatically finishes the round,
+        # the actions are made automatically and players' tribes fed automatically
 
         self.assertTrue(self.gpc.place_figures(self.players[0], Location.HUNTING_GROUNDS, 2))
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.PLACE_FIGURES")
@@ -394,11 +411,18 @@ class GamePhaseControllerIntegration(unittest.TestCase):
         self.gpc.place_figures(self.players[0], Location.CIVILISATION_CARD4, 2)
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.MAKE_ACTION")
         self.gpc.make_action(self.players[0], Location.CIVILISATION_CARD4, [], [])
+
+        # the return value changes the GamePhase to AllPlayersTakeARewardState
+
         self.assertTrue(self.gpc.make_all_players_take_a_reward_choice(self.players[0], reward))
         self.assertEqual(json.loads(self.gpc.state())["game phase"],
                          "GamePhase.ALL_PLAYERS_TAKE_A_REWARD")
         self.assertFalse(self.gpc.make_all_players_take_a_reward_choice(self.players[2], reward))
+
+        # not this player's turn
         self.assertTrue(self.gpc.make_all_players_take_a_reward_choice(self.players[1], reward))
+        # the remaining player should be given the remaining reward automatically,
+        # game returns to MakeActionState
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.MAKE_ACTION")
 
     def test_reward_taking_wrong_order(self) -> None:
