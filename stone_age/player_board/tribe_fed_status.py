@@ -21,23 +21,23 @@ class TribeFedStatus(InterfaceGetState):
         self._figures: PlayerFigures = figures
         # suppose feed methods can be called more than once in a round
         self._fed_people: int = 0
-        self._new_fields: int = 0
+        self._is_food_harvested: bool = False
 
     def add_field(self) -> None:
         if self._fields >= self.MAX_FIELDS:
             return
         self._fields += 1
-        self._new_fields += 1
 
     def new_turn(self) -> None:
         self._tribe_fed = False
-        self._new_fields = 0
+        self._is_food_harvested = False
         self._fed_people = 0
 
     def feed_tribe_if_enough_food(self) -> bool:
-        self._resources_and_food.take_resources(
-            self._new_fields * [Effect.FOOD])
-        self._new_fields = 0
+        if not self._is_food_harvested:
+            self._resources_and_food.take_resources(
+                self._fields * [Effect.FOOD])
+            self._is_food_harvested = True
         to_feed_count: int = self._figures.get_total_figures - self._fed_people
         necessary_food: List[Effect] = to_feed_count * [Effect.FOOD]
         if not self._resources_and_food.has_resources(necessary_food):
