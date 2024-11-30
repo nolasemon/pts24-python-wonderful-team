@@ -15,6 +15,8 @@ class PlaceFiguresState(GamePhaseStateFailureMeta):
 
     def place_figures(self, player: PlayerOrder, location: Location,
                       figures_count: int) -> ActionResult:
+        if figures_count <= 0:
+            return ActionResult.FAILURE
         if self._places[location].place_figures(player, figures_count):
             return ActionResult.ACTION_DONE
         return ActionResult.FAILURE
