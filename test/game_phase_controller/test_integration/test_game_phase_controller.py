@@ -411,14 +411,11 @@ class GamePhaseControllerIntegration(unittest.TestCase):
         self.gpc.place_figures(self.players[0], Location.CIVILISATION_CARD4, 2)
         self.assertEqual(json.loads(self.gpc.state())["game phase"], "GamePhase.MAKE_ACTION")
         self.gpc.make_action(self.players[0], Location.CIVILISATION_CARD4, [], [])
-
         # the return value changes the GamePhase to AllPlayersTakeARewardState
-
         self.assertTrue(self.gpc.make_all_players_take_a_reward_choice(self.players[0], reward))
         self.assertEqual(json.loads(self.gpc.state())["game phase"],
                          "GamePhase.ALL_PLAYERS_TAKE_A_REWARD")
         self.assertFalse(self.gpc.make_all_players_take_a_reward_choice(self.players[2], reward))
-
         # not this player's turn
         self.assertTrue(self.gpc.make_all_players_take_a_reward_choice(self.players[1], reward))
         # the remaining player should be given the remaining reward automatically,
