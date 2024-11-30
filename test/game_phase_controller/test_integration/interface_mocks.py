@@ -85,12 +85,12 @@ class FeedTribeMock(InterfaceFeedTribe):
 class ToolUseMock(InterfaceToolUse):
     use_responses: List[bool]
     not_responses: List[bool]
-    try_responses: List[bool]
+    can_responses: List[bool]
 
     def __init__(self) -> None:
         self.use_responses = []
         self.not_responses = []
-        self.try_responses = []
+        self.can_responses = []
 
     def use_tool(self, idx: int) -> bool:
         assert self.use_responses
@@ -101,8 +101,8 @@ class ToolUseMock(InterfaceToolUse):
         return self.not_responses.pop(0)
 
     def can_use_tools(self) -> bool:
-        assert self.try_responses
-        return self.try_responses.pop(0)
+        assert self.can_responses
+        return self.can_responses.pop(0)
 
 
 class RewardMock(InterfaceTakeReward):
