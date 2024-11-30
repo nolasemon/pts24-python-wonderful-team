@@ -2,12 +2,12 @@ from __future__ import annotations
 from typing import List, Iterable
 from stone_age.simple_types import Effect, ActionResult
 from stone_age.game_board.simple_types import Player
-from stone_age.game_board.reward_menu import RewardMenu
-from stone_age.game_board.interfaces import EvaluateCivilizationCardImmediateEffect, InterfaceThrow
+from stone_age.game_board.interfaces import EvaluateCivilizationCardImmediateEffect
+from stone_age.game_board.interfaces import InterfaceThrow, InterfaceRewardMenu
 
 
 class AllPlayersTakeReward(EvaluateCivilizationCardImmediateEffect):
-    def __init__(self, reward_menu: RewardMenu, throw: InterfaceThrow) -> None:
+    def __init__(self, reward_menu: InterfaceRewardMenu, throw: InterfaceThrow) -> None:
         self._reward_menu = reward_menu
         self._throw = throw
 

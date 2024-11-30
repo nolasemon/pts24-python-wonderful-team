@@ -7,14 +7,10 @@ from stone_age.game_board.interfaces import InterfaceCurrentThrow
 
 
 class GetSomethingThrow(EvaluateCivilizationCardImmediateEffect):
-    def __init__(self, current_throw: InterfaceCurrentThrow) -> None:
+    def __init__(self, current_throw: InterfaceCurrentThrow, resource: Effect) -> None:
         self._current_throw = current_throw
+        self._resource = resource
 
-    def perform_effect(self, player: Player, choice: Iterable[Effect]) -> ActionResult:
-        try:
-            effect = next(iter(choice))
-        except StopIteration:
-            return ActionResult.FAILURE
-
-        self._current_throw.initiate(player, effect, 2)
+    def perform_effect(self, player: Player, choice: Iterable[Effect] = ()) -> ActionResult:
+        self._current_throw.initiate(player, self._resource, 2)
         return ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE
