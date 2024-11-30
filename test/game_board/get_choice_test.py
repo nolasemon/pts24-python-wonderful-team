@@ -1,83 +1,46 @@
 import unittest
-
-from stone_age.simple_types import Effect
+from unittest.mock import Mock
+from typing import Iterable, List
 from stone_age.game_board.get_choice import GetChoice
+from stone_age.simple_types import Effect, ActionResult
+from stone_age.game_board.simple_types import Player
+from stone_age.interfaces import InterfacePlayerBoardGameBoard
 
 
-class GetChoiceTest(unittest.TestCase):
-    def test_initialization_empty(self) -> None:
-        choice = GetChoice([])
-        self.assertEqual(choice.number_of_resources, {})
-        self.assertEqual(choice.chosen_resources, {})
+class TestGetChoice(unittest.TestCase):
+    def setUp(self) -> None:
+        self.mock_player_board = Mock(spec=InterfacePlayerBoardGameBoard)
+        self.mock_player = Mock(spec=Player)
+        self.mock_player.player_board = self.mock_player_board
+        self.get_choice = GetChoice(2)
 
-    def test_initialization_single(self) -> None:
-        choice = GetChoice([Effect.WOOD])
-        self.assertEqual(choice.number_of_resources, {Effect.WOOD: 1})
-        self.assertEqual(choice.chosen_resources, {})
+    def test_perform_effect_valid_choice(self) -> None:
+        choice: Iterable[Effect] = [Effect.WOOD, Effect.CLAY]
+        result = self.get_choice.perform_effect(self.mock_player, choice)
+        self.assertEqual(result, ActionResult.ACTION_DONE)
+        self.mock_player_board.give_effect.assert_called_once_with(
+            list(choice))
 
-    def test_initialization_multiple(self) -> None:
-        resources = [Effect.WOOD, Effect.CLAY,
-                     Effect.WOOD, Effect.CLAY, Effect.CLAY]
-        choice = GetChoice(resources)
-        self.assertEqual(choice.number_of_resources, {
-                         Effect.WOOD: 2, Effect.CLAY: 3})
-        self.assertEqual(choice.chosen_resources, {})
+    def test_perform_effect_invalid_choice_not_iterable(self) -> None:
+        choice: Effect = Effect.WOOD
+        result = self.get_choice.perform_effect(self.mock_player, [choice])
+        self.assertEqual(result, ActionResult.FAILURE)
+        self.mock_player_board.give_effect.assert_not_called()
 
-    def test_make_choice_valid(self) -> None:
-        resources = [Effect.WOOD, Effect.CLAY,
-                     Effect.WOOD, Effect.CLAY, Effect.CLAY]
-        choice = GetChoice(resources)
-        chosen_res = {Effect.WOOD: 1, Effect.CLAY: 2}
-        self.assertTrue(choice.make_choice(chosen_res))
-        self.assertEqual(choice.chosen_resources, chosen_res)
+    def test_perform_effect_invalid_choice_too_many_resources(self) -> None:
+        choice: Iterable[Effect] = [Effect.WOOD, Effect.CLAY, Effect.STONE]
+        result = self.get_choice.perform_effect(self.mock_player, choice)
+        self.assertEqual(result, ActionResult.FAILURE)
+        self.mock_player_board.give_effect.assert_not_called()
 
-    def test_make_choice_invalid_resource(self) -> None:
-        resources = [Effect.WOOD, Effect.CLAY,
-                     Effect.WOOD, Effect.CLAY, Effect.CLAY]
-        choice = GetChoice(resources)
-        chosen_res = {Effect.STONE: 1}
-        self.assertFalse(choice.make_choice(chosen_res))
-        self.assertEqual(choice.chosen_resources, {})
+    def test_perform_effect_invalid_choice_not_a_resource(self) -> None:
+        choice: Iterable[Effect] = [Effect.WOOD, Effect.FOOD]
+        result = self.get_choice.perform_effect(self.mock_player, choice)
+        self.assertEqual(result, ActionResult.FAILURE)
+        self.mock_player_board.give_effect.assert_not_called()
 
-    def test_make_choice_invalid_count(self) -> None:
-        resources = [Effect.WOOD, Effect.CLAY,
-                     Effect.WOOD, Effect.CLAY, Effect.CLAY]
-        choice = GetChoice(resources)
-        chosen_res = {Effect.WOOD: 3}
-        self.assertFalse(choice.make_choice(chosen_res))
-        self.assertEqual(choice.chosen_resources, {})
-
-    def test_make_choice_partially_invalid(self) -> None:
-        resources = [Effect.WOOD, Effect.CLAY,
-                     Effect.WOOD, Effect.CLAY, Effect.CLAY]
-        choice = GetChoice(resources)
-        chosen_res = {Effect.WOOD: 2, Effect.STONE: 1}
-        self.assertFalse(choice.make_choice(chosen_res))
-        self.assertEqual(choice.chosen_resources, {})
-
-    def test_state_empty(self) -> None:
-        choice = GetChoice([])
-        self.assertEqual(choice.state(),
-                         "Number of resources to choose from: {}, Chosen resources: {}")
-
-    def test_state_single(self) -> None:
-        choice = GetChoice([Effect.WOOD])
-        self.assertEqual(choice.state(),
-                         "Number of resources to choose from: {<Effect.WOOD: 2>: 1}, "
-                         "Chosen resources: {}")
-
-    def test_state_multiple(self) -> None:
-        resources = [Effect.WOOD, Effect.CLAY,
-                     Effect.WOOD, Effect.CLAY, Effect.CLAY]
-        choice = GetChoice(resources)
-        expected_state_initial = ("Number of resources to choose from: "
-                                  "{<Effect.WOOD: 2>: 2, <Effect.CLAY: 3>: 3}, "
-                                  "Chosen resources: {}")
-        self.assertEqual(choice.state(), expected_state_initial)
-
-        choice.make_choice({Effect.WOOD: 1, Effect.CLAY: 1})
-        expected_state_after_choice = ("Number of resources to choose from: "
-                                       "{<Effect.WOOD: 2>: 2, <Effect.CLAY: 3>: 3}, "
-                                       "Chosen resources:"
-                                       " {<Effect.WOOD: 2>: 1, <Effect.CLAY: 3>: 1}")
-        self.assertEqual(choice.state(), expected_state_after_choice)
+    def test_perform_effect_invalid_choice_empty(self) -> None:
+        choice: List[Effect] = []
+        result = self.get_choice.perform_effect(self.mock_player, choice)
+        self.assertEqual(result, ActionResult.FAILURE)
+        self.mock_player_board.give_effect.assert_not_called()
