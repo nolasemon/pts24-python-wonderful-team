@@ -1,6 +1,6 @@
 from typing import Dict, Iterable
 from stone_age.simple_types import PlayerOrder, HasAction, ActionResult, Effect
-from stone_age.interfaces import InterfaceFigureLocation, InterfacePlayerBoardGameBoard
+from stone_age.interfaces import InterfaceFigureLocation
 from stone_age.game_board.simple_types import Player
 from stone_age.game_board.interfaces import InterfaceFigureLocationInternal
 
@@ -10,10 +10,12 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
     _interface_figure_location_internal: InterfaceFigureLocationInternal
     _dict_player_order_to_player: Dict[PlayerOrder, Player]
 
-    def __init__(self, internal: InterfaceFigureLocationInternal):
+    def __init__(self, internal: InterfaceFigureLocationInternal,
+                 player_order_to_player: Dict[PlayerOrder, Player]):
         assert isinstance(internal, InterfaceFigureLocationInternal)
         self._interface_figure_location_internal: InterfaceFigureLocationInternal = internal
-        self._dict_player_order_to_player: Dict[PlayerOrder, Player] = {}
+        self._dict_player_order_to_player: Dict[PlayerOrder,
+                                                Player] = player_order_to_player
 
     @property
     def interface_figure_location_internal(self) -> InterfaceFigureLocationInternal:
@@ -25,9 +27,6 @@ class FigureLocationAdaptor(InterfaceFigureLocation):
 
     def player_by_order(self, player_order: PlayerOrder) -> Player:
         assert isinstance(player_order, PlayerOrder)
-        if player_order not in self.dict_player_order_to_player:
-            self.dict_player_order_to_player[player_order] =\
-                Player(player_order, InterfacePlayerBoardGameBoard())
         assert isinstance(
             self.dict_player_order_to_player[player_order], Player)
         return self.dict_player_order_to_player[player_order]

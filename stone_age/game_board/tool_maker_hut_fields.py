@@ -38,78 +38,102 @@ class ToolMakerHutFields:
            tool maker, hut, and field"""
         if self.restriction == 4:
             return True
-        is_tool_maker_occupied: bool = not self.tool_maker_figures
-        is_hut_occupied: bool = not self.hut_figures
-        is_fields_occupied: bool = not self.fields_figures
+        is_tool_maker_occupied: bool = len(self.tool_maker_figures) > 0
+        is_hut_occupied: bool = len(self.hut_figures) > 0
+        is_fields_occupied: bool = len(self.fields_figures) > 0
         return (int(is_tool_maker_occupied) + int(is_hut_occupied) + int(is_fields_occupied)) < 2
 
     def place_on_tool_maker(self, player: Player) -> bool:
         if not self.can_place_on_tool_maker(player):
             return False
+        player.player_board.take_figures(1)
         self.tool_maker_figures.append(player.player_order)
         return True
 
     def action_tool_maker(self, player: Player) -> bool:
-        assert isinstance(player, Player)
-        if len(self.tool_maker_figures) == 0:
-            return False
-        if self.tool_maker_figures[0] != player.player_order:
+        if not self.can_make_action_on_tool_maker(player):
             return False
         player.player_board.give_effect([Effect.TOOL])
         return True
 
     def can_place_on_tool_maker(self, player: Player) -> bool:
         assert isinstance(player, Player)
+        if not player.player_board.has_figures(1):
+            return False
         if not self.can_place_at_all():
             return False
         if len(self.tool_maker_figures) > 0:
             return False
         return True
 
-    def place_on_hut(self, player: Player) -> bool:
-        if not self.can_place_on_tool_maker(player):
+    def can_make_action_on_tool_maker(self, player: Player) -> bool:
+        assert isinstance(player, Player)
+        if len(self.tool_maker_figures) == 0:
             return False
+        if self.tool_maker_figures[0] != player.player_order:
+            return False
+        return True
+
+    def place_on_hut(self, player: Player) -> bool:
+        if not self.can_place_on_hut(player):
+            return False
+        player.player_board.take_figures(2)
         self.hut_figures.append(player.player_order)
         self.hut_figures.append(player.player_order)
         return True
 
     def action_hut(self, player: Player) -> bool:
-        assert isinstance(player, Player)
-        if len(self.hut_figures) == 0:
-            return False
-        if self.hut_figures[0] != player.player_order:
+        if not self.can_place_on_hut(player):
             return False
         player.player_board.give_figure()
         return True
 
     def can_place_on_hut(self, player: Player) -> bool:
         assert isinstance(player, Player)
+        if not player.player_board.has_figures(2):
+            return False
         if not self.can_place_at_all():
             return False
         if len(self.hut_figures) > 0:
             return False
         return True
 
+    def can_make_action_on_hut(self, player: Player) -> bool:
+        assert isinstance(player, Player)
+        if len(self.hut_figures) == 0:
+            return False
+        if self.hut_figures[0] != player.player_order:
+            return False
+        return True
+
     def place_on_fields(self, player: Player) -> bool:
         if not self.can_place_on_fields(player):
             return False
+        player.player_board.take_figures(1)
         self.fields_figures.append(player.player_order)
         return True
 
     def action_fields(self, player: Player) -> bool:
-        assert isinstance(player, Player)
-        if len(self.fields_figures) == 0:
-            return False
-        if self.fields_figures[0] != player.player_order:
+        if not self.can_place_on_fields(player):
             return False
         player.player_board.give_effect([Effect.FIELD])
         return True
 
     def can_place_on_fields(self, player: Player) -> bool:
         assert isinstance(player, Player)
+        if not player.player_board.has_figures(1):
+            return False
         if not self.can_place_at_all():
             return False
         if len(self.fields_figures) > 0:
+            return False
+        return True
+
+    def can_make_action_on_fields(self, player: Player) -> bool:
+        assert isinstance(player, Player)
+        if len(self.fields_figures) == 0:
+            return False
+        if self.fields_figures[0] != player.player_order:
             return False
         return True
 

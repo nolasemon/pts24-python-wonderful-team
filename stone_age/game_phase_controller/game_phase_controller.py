@@ -123,7 +123,8 @@ class GamePhaseController(InterfaceGamePhaseController):
                     first_unsuccesful_player = None
                     self._progress_state_after_succesfull_action()
                 case HasAction.NO_ACTION_POSSIBLE:
-                    if first_unsuccesful_player is None:
+                    game_phase_match: bool = unsuccesful_game_phase == self._game_phase
+                    if first_unsuccesful_player is None or not game_phase_match:
                         first_unsuccesful_player = player
                         unsuccesful_game_phase = self._game_phase
                     self._progress_state_after_no_action_possible()
