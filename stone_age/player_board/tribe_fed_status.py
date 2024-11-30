@@ -24,16 +24,24 @@ class TribeFedStatus(InterfaceGetState):
         self._is_food_harvested: bool = False
 
     def add_field(self) -> None:
+        """Increments `fields` by one if less than `MAX_FIELDS`"""
         if self._fields >= self.MAX_FIELDS:
             return
         self._fields += 1
 
     def new_turn(self) -> None:
+        """Goes to new turn by resetting `tribe_fed` to False"""
         self._tribe_fed = False
         self._is_food_harvested = False
         self._fed_people = 0
 
     def feed_tribe_if_enough_food(self) -> bool:
+        """First stage of feeding.
+        Harvests food and if resource_and_food has enough, uses as much food as there are figures
+
+        Returns:
+            bool: whether resource_and_food has enough food
+        """
         if not self._is_food_harvested:
             self._resources_and_food.take_resources(
                 self._fields * [Effect.FOOD])
@@ -47,6 +55,18 @@ class TribeFedStatus(InterfaceGetState):
         return True
 
     def feed_tribe(self, resources: List[Effect]) -> bool:
+        """Second stage of feeding
+        Should be called in case if previous stage has failed.
+        Feeds tribe with given resources. In case of food shortage will use all food available.
+
+        Args:
+            resources (List[Effect]): `resources` if enough to feed will be used entirely,
+            whether have excess or not
+
+        Returns:
+            bool: whether `resources` is enough
+            and `resources_and_food` has `resources`
+        """
         while self._fed_people < self._figures.get_total_figures and\
                 self._resources_and_food.has_resources([Effect.FOOD]):
             self._fed_people += 1
@@ -59,6 +79,13 @@ class TribeFedStatus(InterfaceGetState):
         return True
 
     def set_tribe_fed(self) -> bool:
+        """Last stage of feeding.
+        Should be called in case if previous stage has failed.
+        Sets `tribe_fed` to True in case of food shortage
+
+        Returns:
+            bool: Always True
+        """
         self._tribe_fed = True
         return True
 
