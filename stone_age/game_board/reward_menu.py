@@ -5,7 +5,6 @@ from stone_age.game_board.simple_types import Player
 from stone_age.interfaces import InterfaceTakeReward
 
 
-
 class RewardMenu(InterfaceTakeReward):
     def __init__(self,
                  players: Mapping[PlayerOrder, Player]) -> None:
@@ -14,11 +13,12 @@ class RewardMenu(InterfaceTakeReward):
 
     def initiate(self, menu: List[Effect]) -> None:
         self.menu = menu
+
     def take_reward(self, player: PlayerOrder, reward: Effect) -> bool:
         if reward in self.menu:
             self.players[player].player_board.give_effect([reward])
             self.menu.remove(reward)
-            return  True
+            return True
         return False
 
     def try_make_action(self, player: PlayerOrder) -> HasAction:
@@ -32,6 +32,6 @@ class RewardMenu(InterfaceTakeReward):
 
     def state(self) -> str:
         state: Any = {
-            "menu content": self.menu
+            "menu content": [effect.name for effect in self.menu]
         }
         return json.dumps(state)

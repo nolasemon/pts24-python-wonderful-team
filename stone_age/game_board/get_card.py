@@ -4,6 +4,7 @@ from stone_age.game_board.interfaces import EvaluateCivilizationCardImmediateEff
 from stone_age.game_board.simple_types import Player
 from stone_age.game_board.civilization_card_deck import CivilizationCardDeck
 
+
 class GetCard(EvaluateCivilizationCardImmediateEffect):
     def __init__(self, card_deck: CivilizationCardDeck):
         self._card_deck = card_deck
@@ -13,5 +14,6 @@ class GetCard(EvaluateCivilizationCardImmediateEffect):
         if top_card is None:
             return ActionResult.ACTION_DONE
 
-        player.player_board.give_end_of_the_game_effect(top_card.end_of_game_effects)
+        player.player_board.give_end_of_the_game_effect(
+            top_card.end_of_game_effects)
         return ActionResult.ACTION_DONE
