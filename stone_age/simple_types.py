@@ -31,6 +31,9 @@ class PlayerOrder:
         assert self._players == other.players
         return self._order == other.order
 
+    def __hash__(self) -> int:
+        return hash((self.order, self.players))
+
 
 class Location(Enum):
     TOOL_MAKER = 1
@@ -50,6 +53,9 @@ class Location(Enum):
     BUILDING_TILE3 = 23
     BUILDING_TILE4 = 24
 
+    def __lt__(self, other: Location) -> bool:
+        return self.value < other.value
+
 
 class Effect(IntEnum):
     FOOD = 1
@@ -63,6 +69,7 @@ class Effect(IntEnum):
     ONE_TIME_TOOL2 = 12
     ONE_TIME_TOOL3 = 13
     ONE_TIME_TOOL4 = 14
+    POINT = 15
 
     @staticmethod
     def is_resource(effect: Effect) -> bool:
@@ -111,6 +118,12 @@ class ImmediateEffect(Enum):
     CARD = 10
     ARBITRARY_RESOURCE = 11
     FOOD = 12
+    ALL_PLAYERS_TAKE_REWARD = 13
+    TOOL = 14
+    ONE_TIME_TOOL2 = 15
+    ONE_TIME_TOOL3 = 16
+    ONE_TIME_TOOL4 = 17
+    FIELD = 18
 
 
 class EndOfGameEffect(IntEnum):

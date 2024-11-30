@@ -144,7 +144,7 @@ class InterfaceStoneAgeGame:
     def no_more_tools_this_throw(self, player_id: int) -> bool:
         assert False
 
-    def feed_tribe(self, player_id: int) -> bool:
+    def feed_tribe(self, player_id: int, resources: Iterable[Effect]) -> bool:
         assert False
 
     def do_not_feed_this_turn(self, player_id: int) -> bool:
