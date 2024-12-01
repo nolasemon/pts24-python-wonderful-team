@@ -23,6 +23,10 @@ class TribeFedStatus(InterfaceGetState):
         self._fed_people: int = 0
         self._is_food_harvested: bool = False
 
+    @property
+    def is_food_harvested(self) -> bool:
+        return self._is_food_harvested
+
     def add_field(self) -> None:
         """Increments `fields` by one if less than `MAX_FIELDS`"""
         if self._fields >= self.MAX_FIELDS:
