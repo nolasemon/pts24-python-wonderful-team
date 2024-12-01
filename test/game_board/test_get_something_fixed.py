@@ -29,14 +29,14 @@ class TestGetSomethingFixed(unittest.TestCase):
     def test_perform_effect_with_choice(self) -> None:
         fixed_effect = Effect.FOOD
         action = GetSomethingFixed(effect=fixed_effect)
-        result = action.perform_effect(self.player, choice=Effect.WOOD)
+        result = action.perform_effect(self.player, choice=[Effect.WOOD])
         self.assertEqual(result, ActionResult.FAILURE)
         self.assertEqual(len(self.player_board.received_effects), 0)
 
     def test_perform_effect_without_choice(self) -> None:
         fixed_effect = Effect.FOOD
         action = GetSomethingFixed(effect=fixed_effect)
-        result = action.perform_effect(self.player, choice=None)
+        result = action.perform_effect(self.player, choice=[])
         self.assertEqual(result, ActionResult.ACTION_DONE)
         self.assertEqual(len(self.player_board.received_effects), 1)
         self.assertIn(fixed_effect, self.player_board.received_effects)

@@ -10,14 +10,19 @@ class RewardMenu(InterfaceTakeReward):
                  players: Mapping[PlayerOrder, Player]) -> None:
         self.menu: List[Effect] = []
         self.players = players
+        self.players_to_reward: List[PlayerOrder] = []
 
     def initiate(self, menu: List[Effect]) -> None:
         self.menu = menu
+        self.players_to_reward = list(self.players.keys())
 
     def take_reward(self, player: PlayerOrder, reward: Effect) -> bool:
+        if player not in self.players_to_reward:
+            return False
         if reward in self.menu:
             self.players[player].player_board.give_effect([reward])
             self.menu.remove(reward)
+            self.players_to_reward.remove(player)
             return True
         return False
 

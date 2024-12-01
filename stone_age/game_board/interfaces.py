@@ -41,5 +41,5 @@ class InterfaceFigureLocationInternal:
 
 
 class EvaluateCivilizationCardImmediateEffect:
-    def perform_effect(self, player: Player, choice: Optional[Effect]) -> ActionResult:
+    def perform_effect(self, player: Player, choice: Iterable[Effect]) -> ActionResult:
         assert False

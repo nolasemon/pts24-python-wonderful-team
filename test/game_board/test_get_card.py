@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Optional, Iterable
+from typing import List, Iterable
 from stone_age.simple_types import ActionResult, CivilisationCard, EndOfGameEffect, PlayerOrder
 from stone_age.game_board.simple_types import Player
 from stone_age.game_board.civilization_card_deck import CivilizationCardDeck
@@ -19,8 +19,8 @@ class TestCivilizationCardDeck(CivilizationCardDeck):
     def __init__(self, cards: List[CivilisationCard]) -> None:
         self._cards = cards
 
-    def get_top(self) -> Optional[CivilisationCard]:
-        return self._cards.pop(0) if self._cards else None
+    def get_top(self) -> Iterable[CivilisationCard]:
+        return [self._cards.pop(0)] if self._cards else []
 
 
 class TestGetCard(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestGetCard(unittest.TestCase):
         deck = TestCivilizationCardDeck(cards=[])
         get_card = GetCard(deck)
 
-        result = get_card.perform_effect(self.player, choice=None)
+        result = get_card.perform_effect(self.player, choice=[])
 
         self.assertEqual(result, ActionResult.ACTION_DONE)
         self.assertEqual(len(self.player_board.received_effects), 0)
@@ -48,7 +48,7 @@ class TestGetCard(unittest.TestCase):
         deck = TestCivilizationCardDeck(cards=[card])
         get_card = GetCard(deck)
 
-        result = get_card.perform_effect(self.player, choice=None)
+        result = get_card.perform_effect(self.player, choice=[])
 
         self.assertEqual(result, ActionResult.ACTION_DONE)
         self.assertEqual(len(self.player_board.received_effects), 1)
@@ -68,16 +68,14 @@ class TestGetCard(unittest.TestCase):
         deck = TestCivilizationCardDeck(cards=[card1, card2])
         get_card = GetCard(deck)
 
-        result = get_card.perform_effect(self.player, choice=None)
+        result = get_card.perform_effect(self.player, choice=[])
         self.assertEqual(result, ActionResult.ACTION_DONE)
         self.assertEqual(len(self.player_board.received_effects), 1)
         self.assertIn(effect1, self.player_board.received_effects)
 
         top_card = deck.get_top()
-        if top_card is not None:
-            self.assertEqual(top_card.end_of_game_effects[0], effect2)
-        else:
-            self.fail("Expected a card but got None")
+        for card in top_card:
+            self.assertEqual(card.end_of_game_effects[0], effect2)
 
 
 if __name__ == "__main__":
