@@ -1,6 +1,6 @@
 from typing import Optional, Iterable
 
-from stone_age.player_board.player_board import PlayerBoard, PlayerBoardConfig
+from stone_age.player_board.player_board import PlayerBoard
 from stone_age.interfaces import InterfaceFeedTribe, InterfaceNewTurn, InterfacePlayerBoardGameBoard
 from stone_age.simple_types import Effect, EndOfGameEffect
 
@@ -9,8 +9,8 @@ class PlayerBoardGameBoardFacade(InterfacePlayerBoardGameBoard,
                                  InterfaceNewTurn,
                                  InterfaceFeedTribe):
 
-    def __init__(self, player_board_config: PlayerBoardConfig) -> None:
-        self._player_board = PlayerBoard(player_board_config)
+    def __init__(self, player_board: PlayerBoard) -> None:
+        self._player_board = player_board
 
     @property
     def player_board(self) -> PlayerBoard:
