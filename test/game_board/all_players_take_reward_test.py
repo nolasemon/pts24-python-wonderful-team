@@ -2,15 +2,16 @@ import unittest
 from unittest.mock import Mock
 
 from stone_age.game_board.all_players_take_reward import AllPlayersTakeReward
-from stone_age.game_board.interfaces import InterfaceRewardMenu, InterfaceThrow
+from stone_age.game_board.throw import Throw
+from stone_age.interfaces import InterfaceTakeReward
 from stone_age.simple_types import PlayerOrder, Effect, ActionResult
 from stone_age.game_board.simple_types import Player
 
 
 class TestAllPlayersTakeReward(unittest.TestCase):
     def setUp(self) -> None:
-        self.mock_reward_menu = Mock(spec=InterfaceRewardMenu)
-        self.mock_throw = Mock(spec=InterfaceThrow)
+        self.mock_reward_menu = Mock(spec=InterfaceTakeReward)
+        self.mock_throw = Mock(spec=Throw)
         self.mock_player = Mock(spec=Player)
 
     def test_perform_effect_valid_throws(self) -> None:

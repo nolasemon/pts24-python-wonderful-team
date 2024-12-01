@@ -1,6 +1,6 @@
 # pylint: disable=unused-argument, duplicate-code
 from __future__ import annotations
-from typing import Iterable, Optional
+from typing import Iterable, Optional, List
 from stone_age.simple_types import PlayerOrder, Location, Effect
 from stone_age.simple_types import HasAction, ActionResult, EndOfGameEffect
 
@@ -106,6 +106,9 @@ class InterfaceToolUse:
 
 
 class InterfaceTakeReward:
+    def initiate(self, menu: List[Effect]) -> None:
+        assert False
+
     def take_reward(self, player: PlayerOrder, reward: Effect) -> bool:
         assert False
 
