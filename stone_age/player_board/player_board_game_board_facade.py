@@ -26,6 +26,8 @@ class PlayerBoardGameBoardFacade(InterfacePlayerBoardGameBoard,
                 self._player_board.fed_status.add_field()
             elif item == Effect.TOOL:
                 self._player_board.tools.add_tool()
+            elif item == Effect.POINT:
+                self._player_board.add_points(1)
             else:
                 strength: int = item - 10  # OneTimeTool2 has a constant value 12 => strength = 2
                 self._player_board.tools.add_single_use_tool(strength)
