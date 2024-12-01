@@ -14,7 +14,9 @@ class PlaceOnFieldsAdaptor(InterfaceFigureLocationInternal):
         self._fields: ToolMakerHutFields = fields
 
     def place_figures(self, player: Player, figure_count: int) -> bool:
-        assert isinstance(player, Player) and figure_count > 0
+        assert isinstance(player, Player)
+        if figure_count <= 0:
+            return False
         if self.try_to_place_figures(player, figure_count) == HasAction.NO_ACTION_POSSIBLE:
             return False
         self._fields.place_on_fields(player)
@@ -25,7 +27,9 @@ class PlaceOnFieldsAdaptor(InterfaceFigureLocationInternal):
         If a figure can be placed, we wait for a player, otherwise there is
         no action possible.
         """
-        assert isinstance(player, Player) and count > 0
+        assert isinstance(player, Player)
+        if count <= 0:
+            return HasAction.NO_ACTION_POSSIBLE
         if count > 1:
             return HasAction.NO_ACTION_POSSIBLE
         if not self._fields.can_place_on_fields(player):
@@ -36,7 +40,7 @@ class PlaceOnFieldsAdaptor(InterfaceFigureLocationInternal):
                     output_resources: Iterable[Effect]) -> ActionResult:
         """
         The player needs neither input nor output resources to make an action on Fields.
-        After the action location must be clear and prepared a new turn.
+        After the action the location will be clear and prepared for a new turn.
         """
         assert isinstance(player, Player)
         assert all(isinstance(effect, Effect) for effect in input_resources)
@@ -47,7 +51,6 @@ class PlaceOnFieldsAdaptor(InterfaceFigureLocationInternal):
             return ActionResult.FAILURE
         if not self._fields.action_fields(player):
             return ActionResult.FAILURE
-        self._fields.new_turn()
         return ActionResult.ACTION_DONE
 
     def skip_action(self, player: Player) -> bool:

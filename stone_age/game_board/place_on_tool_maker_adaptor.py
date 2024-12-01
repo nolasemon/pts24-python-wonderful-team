@@ -14,7 +14,9 @@ class PlaceOnToolMakerAdaptor(InterfaceFigureLocationInternal):
         self._tool_maker: ToolMakerHutFields = tool_maker
 
     def place_figures(self, player: Player, figure_count: int) -> bool:
-        assert isinstance(player, Player) and figure_count > 0
+        assert isinstance(player, Player)
+        if figure_count <= 0:
+            return False
         if self.try_to_place_figures(player, figure_count) == HasAction.NO_ACTION_POSSIBLE:
             return False
         self._tool_maker.place_on_tool_maker(player)
@@ -25,7 +27,9 @@ class PlaceOnToolMakerAdaptor(InterfaceFigureLocationInternal):
         If a figure can be placed, we wait for a player, otherwise there is
         no action possible.
         """
-        assert isinstance(player, Player) and count > 0
+        assert isinstance(player, Player)
+        if count <= 0:
+            return HasAction.NO_ACTION_POSSIBLE
         if count > 1:
             return HasAction.NO_ACTION_POSSIBLE
         if not self._tool_maker.can_place_on_tool_maker(player):
@@ -36,7 +40,7 @@ class PlaceOnToolMakerAdaptor(InterfaceFigureLocationInternal):
                     output_resources: Iterable[Effect]) -> ActionResult:
         """
         The player needs neither input nor output resources to make an action on the tool maker.
-        After the action location must be clear and prepared for a new turn.
+        After the action the location will be clear and prepared for a new turn.
         """
         assert isinstance(player, Player)
         assert all(isinstance(effect, Effect) for effect in input_resources)
@@ -47,11 +51,10 @@ class PlaceOnToolMakerAdaptor(InterfaceFigureLocationInternal):
             return ActionResult.FAILURE
         if not self._tool_maker.action_tool_maker(player):
             return ActionResult.FAILURE
-        self._tool_maker.new_turn()
         return ActionResult.ACTION_DONE
 
     def skip_action(self, player: Player) -> bool:
-        """It is no way, that player can take her figure and leave tht tool maker in place"""
+        """It is no way, that player can take her figure and leave the tool maker in place"""
         return False
 
     def try_to_make_action(self, player: Player) -> HasAction:
