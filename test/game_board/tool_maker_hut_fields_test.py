@@ -16,8 +16,8 @@ class PlayerBoardMock(InterfacePlayerBoardGameBoard):
     def give_effect(self, stuff: Iterable[Effect]) -> None:
         pass
 
-    def give_figure(self) -> None:
-        pass
+    def give_figure(self) -> bool:
+        return True
 
     def take_figures(self, count: int) -> bool:
         if count > self._figure_count:

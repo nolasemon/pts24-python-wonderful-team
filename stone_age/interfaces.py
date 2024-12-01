@@ -69,8 +69,7 @@ class InterfacePlayerBoardGameBoard:
     def give_end_of_the_game_effect(self, stuff: Iterable[EndOfGameEffect]) -> None:
         assert False
 
-    def give_figure(self) -> None:
-        """Adds new figure after successful HUT action."""
+    def give_figure(self) -> bool:
         assert False
 
     def take_resourses(self, stuff: Iterable[Effect]) -> bool:
