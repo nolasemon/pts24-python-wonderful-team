@@ -21,8 +21,8 @@ class MockInterfacePlayerBoardGameBoard(InterfacePlayerBoardGameBoard):
     def give_end_of_the_game_effect(self, stuff: Iterable[EndOfGameEffect]) -> None:
         return None
 
-    def give_figure(self) -> None:
-        return None
+    def give_figure(self) -> bool:
+        return True
 
     def take_resourses(self, stuff: Iterable[Effect]) -> bool:
         assert all(isinstance(effect, Effect) for effect in stuff)
