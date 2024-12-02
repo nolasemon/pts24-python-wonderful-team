@@ -41,7 +41,7 @@ class PlayerResourcesAndFood(InterfaceGetState):
 
     def state(self) -> str:
         state: Any = {
-            entry.name: self._resources[entry] if entry in self._resources else 0
+            entry.name: self._resources.get(entry, 0)
             for entry in Effect
             if Effect.is_resource_or_food(entry)
         }
