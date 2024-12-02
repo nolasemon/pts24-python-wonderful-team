@@ -1,6 +1,6 @@
 import json
 
-from typing import List, Optional, Any
+from typing import List, Optional, Any, override
 from stone_age.interfaces import InterfaceGetState
 
 
@@ -52,6 +52,7 @@ class PlayerTools(InterfaceGetState):
     def tool_count(self) -> int:
         return len(self._tools)
 
+    @override
     def state(self) -> str:
         state: Any = {
             "tools strength": self._tools[:3],

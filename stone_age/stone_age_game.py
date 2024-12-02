@@ -45,11 +45,11 @@ class StoneAgeGame(InterfaceStoneAgeGame):
         """
         self._state = json.dumps({
             "player_board " + str(self._players[i]):
-                json.loads(self._player_boards[self._players[i]].get_state())
+                json.loads(self._player_boards[self._players[i]].state())
                 for i in sorted(self._players)
-            } | {"game_board": json.loads(self._game_board.get_state()),
-                 "game_phase": json.loads(self._phase_controller.state())}
-            )
+        } | {"game_board": json.loads(self._game_board.state()),
+             "game_phase": json.loads(self._phase_controller.state())}
+        )
 
     def place_figures(self, player_id: int, location: Location, figures_count: int) -> bool:
         output: bool = self._phase_controller.place_figures(self._players[player_id],
@@ -67,31 +67,36 @@ class StoneAgeGame(InterfaceStoneAgeGame):
         return output
 
     def skip_action(self, player_id: int, location: Location) -> bool:
-        output: bool = self._phase_controller.skip_action(self._players[player_id], location)
+        output: bool = self._phase_controller.skip_action(
+            self._players[player_id], location)
         self._update_state()
         self._observable.notify(self._state)
         return output
 
     def use_tools(self, player_id: int, tool_index: int) -> bool:
-        output: bool = self._phase_controller.use_tools(self._players[player_id], tool_index)
+        output: bool = self._phase_controller.use_tools(
+            self._players[player_id], tool_index)
         self._update_state()
         self._observable.notify(self._state)
         return output
 
     def no_more_tools_this_throw(self, player_id: int) -> bool:
-        output: bool = self._phase_controller.no_more_tools_this_throw(self._players[player_id])
+        output: bool = self._phase_controller.no_more_tools_this_throw(
+            self._players[player_id])
         self._update_state()
         self._observable.notify(self._state)
         return output
 
     def feed_tribe(self, player_id: int, resources: Iterable[Effect]) -> bool:
-        output: bool = self._phase_controller.feed_tribe(self._players[player_id], resources)
+        output: bool = self._phase_controller.feed_tribe(
+            self._players[player_id], resources)
         self._update_state()
         self._observable.notify(self._state)
         return output
 
     def do_not_feed_this_turn(self, player_id: int) -> bool:
-        output: bool = self._phase_controller.do_not_feed_this_turn(self._players[player_id])
+        output: bool = self._phase_controller.do_not_feed_this_turn(
+            self._players[player_id])
         self._update_state()
         self._observable.notify(self._state)
         return output

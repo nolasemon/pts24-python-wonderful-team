@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, override
 import json
 
 from stone_age.interfaces import InterfaceGetState
@@ -98,6 +98,7 @@ class TribeFedStatus(InterfaceGetState):
     def fields(self) -> int:
         return self._fields
 
+    @override
     def state(self) -> str:
         state: Any = {
             "tribe fed": self._tribe_fed,

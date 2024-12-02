@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, override
 import json
 from stone_age.interfaces import InterfaceGetState
 from stone_age.player_board.player_civilisation_cards import PlayerCivilisationCards
@@ -65,6 +65,7 @@ class PlayerBoard(InterfaceGetState):
             self._figures.get_total_figures
         )
 
+    @override
     def state(self) -> str:
         state: Any = {
             "points": self._points,

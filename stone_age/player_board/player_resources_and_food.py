@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Any
+from typing import Any, override
 import json
 
 from stone_age.interfaces import InterfaceGetState
@@ -39,6 +39,7 @@ class PlayerResourcesAndFood(InterfaceGetState):
         return sum(Effect.points(resource) * count
                    for resource, count in self._resources.items())
 
+    @override
     def state(self) -> str:
         state: Any = {
             entry.name: self._resources.get(entry, 0)
