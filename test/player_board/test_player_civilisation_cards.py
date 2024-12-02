@@ -98,8 +98,11 @@ class TestPlayerCivilisationCards(unittest.TestCase):
         self.cards.add_end_of_game_effects(
             [EndOfGameEffect.FARMER, EndOfGameEffect.FARMER])
         state = self.cards.state()
-        self.assertIn("FARMER", state)
-        self.assertIn("2", state)
+        self.assertIn('"FARMER": 2', state)
+        for entry in EndOfGameEffect:
+            if entry is EndOfGameEffect.FARMER:
+                continue
+            self.assertIn(f'"{entry.name}": 0', state)
 
 
 if __name__ == "__main__":
