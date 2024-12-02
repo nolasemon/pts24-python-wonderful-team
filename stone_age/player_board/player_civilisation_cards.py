@@ -1,5 +1,7 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 from collections import defaultdict
+import json
+
 from stone_age.interfaces import InterfaceGetState
 from stone_age.simple_types import EndOfGameEffect
 
@@ -54,4 +56,8 @@ class PlayerCivilisationCards(InterfaceGetState):
         return result_points
 
     def state(self) -> str:
-        return f"End game effects: {dict(self._end_effect_cards)}"
+        state: Any = {
+            entry.name: self._end_effect_cards.get(entry, 0)
+            for entry in EndOfGameEffect
+        }
+        return json.dumps(state)

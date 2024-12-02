@@ -47,25 +47,25 @@ class TestTribeFedStatus(unittest.TestCase):
             s3, {"tribe fed": False, "fields": TribeFedStatus.MAX_FIELDS})
 
     def test_feed_if_enough_food_success(self) -> None:
-        self.resources_and_food.take_resources([Effect.FOOD] * 10)
+        self.resources_and_food.give_resources([Effect.FOOD] * 10)
         self.assertTrue(self.fed_status.feed_tribe_if_enough_food())
         s: Any = json.loads(self.fed_status.state())
         self.assertEqual(s, {"tribe fed": True, "fields": 0})
         self.assertFalse(self.resources_and_food.has_resources([Effect.FOOD]))
 
     def test_feed_tribe_with_resources(self) -> None:
-        self.resources_and_food.take_resources([Effect.FOOD] * 8)
+        self.resources_and_food.give_resources([Effect.FOOD] * 8)
         self.assertFalse(self.fed_status.feed_tribe_if_enough_food())
         self.assertFalse(self.fed_status.feed_tribe(
             [Effect.WOOD, Effect.CLAY]))
-        self.resources_and_food.take_resources([Effect.WOOD, Effect.CLAY])
+        self.resources_and_food.give_resources([Effect.WOOD, Effect.CLAY])
         self.assertTrue(self.fed_status.feed_tribe([Effect.WOOD, Effect.CLAY]))
         self.assertFalse(self.resources_and_food.has_resources([Effect.FOOD]))
         s: Any = json.loads(self.fed_status.state())
         self.assertEqual(s, {"tribe fed": True, "fields": 0})
 
     def test_feed_tribe_unsuccessful(self) -> None:
-        self.resources_and_food.take_resources([Effect.FOOD] * 8)
+        self.resources_and_food.give_resources([Effect.FOOD] * 8)
         self.assertFalse(self.fed_status.feed_tribe_if_enough_food())
         self.assertFalse(self.fed_status.feed_tribe([]))
         self.assertTrue(self.fed_status.set_tribe_fed())
@@ -75,7 +75,7 @@ class TestTribeFedStatus(unittest.TestCase):
 
         self.fed_status.new_turn()
 
-        self.resources_and_food.take_resources(
+        self.resources_and_food.give_resources(
             [Effect.FOOD] * 7 + [Effect.CLAY, Effect.GOLD])
         self.assertFalse(self.fed_status.feed_tribe_if_enough_food())
         self.assertFalse(self.fed_status.feed_tribe(
@@ -86,21 +86,21 @@ class TestTribeFedStatus(unittest.TestCase):
         self.assertEqual(s2, {"tribe fed": True, "fields": 0})
 
     def test_multiple_calls_food(self) -> None:
-        self.resources_and_food.take_resources([Effect.FOOD] * 5)
+        self.resources_and_food.give_resources([Effect.FOOD] * 5)
         self.assertFalse(self.fed_status.feed_tribe_if_enough_food())
         self.assertFalse(self.fed_status.feed_tribe([]))
         s1: Any = json.loads(self.fed_status.state())
         self.assertEqual(s1, {"tribe fed": False, "fields": 0})
         self.assertFalse(self.resources_and_food.has_resources([Effect.FOOD]))
 
-        self.resources_and_food.take_resources([Effect.FOOD] * 5)
+        self.resources_and_food.give_resources([Effect.FOOD] * 5)
         self.assertTrue(self.fed_status.feed_tribe_if_enough_food())
         s2: Any = json.loads(self.fed_status.state())
         self.assertEqual(s2, {"tribe fed": True, "fields": 0})
         self.assertFalse(self.resources_and_food.has_resources([Effect.FOOD]))
 
     def test_feed_with_fields(self) -> None:
-        self.resources_and_food.take_resources([Effect.FOOD] * 8)
+        self.resources_and_food.give_resources([Effect.FOOD] * 8)
         self.fed_status.add_field()
         self.fed_status.add_field()
         self.assertTrue(self.fed_status.feed_tribe_if_enough_food())
@@ -109,7 +109,7 @@ class TestTribeFedStatus(unittest.TestCase):
         self.assertEqual(s, {"tribe fed": True, "fields": 2})
 
     def test_new_turn(self) -> None:
-        self.resources_and_food.take_resources([Effect.FOOD] * 8)
+        self.resources_and_food.give_resources([Effect.FOOD] * 8)
         self.fed_status.add_field()
         self.fed_status.add_field()
         self.fed_status.feed_tribe_if_enough_food()
@@ -129,7 +129,7 @@ class TestTribeFedStatus(unittest.TestCase):
     def test_surplus_food(self) -> None:
         for _ in range(5):
             self.fed_status.add_field()
-        self.resources_and_food.take_resources(
+        self.resources_and_food.give_resources(
             [Effect.FOOD] * 11 + [Effect.CLAY] * 5)
         self.assertTrue(self.fed_status.feed_tribe_if_enough_food())
         s: Any = json.loads(self.fed_status.state())
@@ -147,7 +147,7 @@ class TestTribeFedStatus(unittest.TestCase):
         for _ in range(5):
             self.fed_status.add_field()
 
-        self.resources_and_food.take_resources([Effect.GOLD] * 6)
+        self.resources_and_food.give_resources([Effect.GOLD] * 6)
         self.assertFalse(self.fed_status.feed_tribe_if_enough_food())
         self.assertTrue(self.fed_status.feed_tribe([Effect.GOLD] * 5))
         s: Any = json.loads(self.fed_status.state())
@@ -160,7 +160,7 @@ class TestTribeFedStatus(unittest.TestCase):
         for _ in range(5):
             self.fed_status.add_field()
 
-        self.resources_and_food.take_resources(
+        self.resources_and_food.give_resources(
             [Effect.FOOD] * 4 + [Effect.CLAY] * 3)
         self.assertFalse(self.fed_status.feed_tribe_if_enough_food())
         self.assertTrue(self.fed_status.feed_tribe([Effect.CLAY]))

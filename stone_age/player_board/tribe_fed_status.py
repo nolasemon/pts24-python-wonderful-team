@@ -47,18 +47,17 @@ class TribeFedStatus(InterfaceGetState):
             bool: whether resource_and_food has enough food
         """
         if not self._is_food_harvested:
-            self._resources_and_food.take_resources(
+            self._resources_and_food.give_resources(
                 self._fields * [Effect.FOOD])
             self._is_food_harvested = True
         to_feed_count: int = self._figures.get_total_figures - self._fed_people
         necessary_food: List[Effect] = to_feed_count * [Effect.FOOD]
-        if not self._resources_and_food.has_resources(necessary_food):
+        if not self._resources_and_food.take_resources(necessary_food):
             return False
         self._tribe_fed = True
-        self._resources_and_food.give_resources(necessary_food)
         return True
 
-    def feed_tribe(self, resources: List[Effect]) -> bool:
+    def feed_tribe(self, effects: List[Effect]) -> bool:
         """Second stage of feeding
         Should be called in case if previous stage has failed.
         Feeds tribe with given resources. In case of food shortage will use all food available.
@@ -72,13 +71,12 @@ class TribeFedStatus(InterfaceGetState):
             and `resources_and_food` has `resources`
         """
         while self._fed_people < self._figures.get_total_figures and\
-                self._resources_and_food.has_resources([Effect.FOOD]):
+                self._resources_and_food.take_resources([Effect.FOOD]):
             self._fed_people += 1
-            self._resources_and_food.give_resources([Effect.FOOD])
         remaining: int = self._figures.get_total_figures - self._fed_people
-        if len(resources) < remaining or not self._resources_and_food.has_resources(resources):
+        resources = list(filter(Effect.is_resource, effects))
+        if len(resources) < remaining or not self._resources_and_food.take_resources(resources):
             return False
-        self._resources_and_food.give_resources(resources)
         self._tribe_fed = True
         return True
 
