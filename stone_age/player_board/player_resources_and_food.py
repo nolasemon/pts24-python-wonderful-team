@@ -1,4 +1,7 @@
 from collections import defaultdict
+from typing import Any
+import json
+
 from stone_age.interfaces import InterfaceGetState
 from stone_age.simple_types import Effect
 
@@ -16,13 +19,13 @@ class PlayerResourcesAndFood(InterfaceGetState):
                 return False
         return True
 
-    def take_resources(self, resources: list[Effect]) -> bool:
+    def give_resources(self, resources: list[Effect]) -> bool:
         """Add resources to player's inventory"""
         for resource in resources:
             self._resources[resource] += 1
         return True
 
-    def give_resources(self, resources: list[Effect]) -> bool:
+    def take_resources(self, resources: list[Effect]) -> bool:
         """Remove resources from player's inventory if possible"""
         if not self.has_resources(resources):
             return False
@@ -37,6 +40,9 @@ class PlayerResourcesAndFood(InterfaceGetState):
                    for resource, count in self._resources.items())
 
     def state(self) -> str:
-        return "\n".join(f"{resource.name}: {count}"
-                         for resource, count in sorted(self._resources.items())
-                         if count > 0)
+        state: Any = {
+            entry.name: self._resources[entry] if entry in self._resources else 0
+            for entry in Effect
+            if Effect.is_resource_or_food(entry)
+        }
+        return json.dumps(state)
