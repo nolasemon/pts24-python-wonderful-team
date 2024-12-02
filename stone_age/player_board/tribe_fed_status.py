@@ -60,7 +60,7 @@ class TribeFedStatus(InterfaceGetState):
     def feed_tribe(self, effects: List[Effect]) -> bool:
         """Second stage of feeding
         Should be called in case if previous stage has failed.
-        Feeds tribe with taken resources. In case of food shortage will use all food available.
+        Feeds tribe with given resources. In case of food shortage will use all food available.
 
         Args:
             resources (List[Effect]): `resources` if enough to feed will be used entirely,
