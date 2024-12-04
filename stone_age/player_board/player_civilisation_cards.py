@@ -1,4 +1,4 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, override
 from collections import defaultdict
 import json
 
@@ -55,6 +55,7 @@ class PlayerCivilisationCards(InterfaceGetState):
 
         return result_points
 
+    @override
     def state(self) -> str:
         state: Any = {
             entry.name: self._end_effect_cards.get(entry, 0)
