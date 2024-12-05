@@ -36,8 +36,7 @@ class PlayerResourcesAndFood(InterfaceGetState):
 
     def number_of_resources_for_final_points(self) -> int:
         """Calculate final points from resources"""
-        return sum(Effect.points(resource) * count
-                   for resource, count in self._resources.items())
+        return sum(count for effect, count in self._resources.items() if Effect.is_resource(effect))
 
     @override
     def state(self) -> str:
