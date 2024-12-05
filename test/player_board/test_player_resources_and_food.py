@@ -11,20 +11,22 @@ class TestPlayerResourcesAndFood(unittest.TestCase):
         self.resources = PlayerResourcesAndFood()
 
     def test_state_isolated(self) -> None:
-        self.resources._resources = { # pylint: disable=protected-access
+        self.resources._resources = {  # pylint: disable=protected-access
             Effect.WOOD: 42,
             Effect.CLAY: 255,
             Effect.FOOD: -2,
             Effect.GOLD: 0,
         }
         s: Any = json.loads(self.resources.state())
-        self.assertEqual(s, { "WOOD": 42, "CLAY": 255, "FOOD": -2, "GOLD": 0, "STONE": 0 })
+        self.assertEqual(s, {"WOOD": 42, "CLAY": 255,
+                         "FOOD": -2, "GOLD": 0, "STONE": 0})
 
     def test_state_representation(self) -> None:
         """Test string representation of resources."""
         # Test empty state
         s1: Any = json.loads(self.resources.state())
-        self.assertEqual(s1, { key: 0 for key in ["WOOD", "STONE", "CLAY", "GOLD", "FOOD"] })
+        self.assertEqual(
+            s1, {key: 0 for key in ["WOOD", "STONE", "CLAY", "GOLD", "FOOD"]})
 
         # Test with some resources
         self.resources.give_resources([Effect.WOOD, Effect.WOOD, Effect.CLAY])
@@ -124,7 +126,12 @@ class TestPlayerResourcesAndFood(unittest.TestCase):
         # Test single resource
         self.resources.give_resources([Effect.WOOD])
         self.assertEqual(
-            self.resources.number_of_resources_for_final_points(), 3)
+            self.resources.number_of_resources_for_final_points(), 1)
+
+        # Test food
+        self.resources.give_resources([Effect.FOOD])
+        self.assertEqual(
+            self.resources.number_of_resources_for_final_points(), 1)
 
         # Test multiple resources
         self.resources.give_resources([
@@ -133,12 +140,16 @@ class TestPlayerResourcesAndFood(unittest.TestCase):
             Effect.GOLD
         ])
         self.assertEqual(
-            self.resources.number_of_resources_for_final_points(), 18)
+            self.resources.number_of_resources_for_final_points(), 4)
 
         # Test multiple of same resource
         self.resources.give_resources([Effect.GOLD])
         self.assertEqual(
-            self.resources.number_of_resources_for_final_points(), 24)
+            self.resources.number_of_resources_for_final_points(), 5)
+
+        self.resources.give_resources([Effect.FOOD])
+        self.assertEqual(
+            self.resources.number_of_resources_for_final_points(), 5)
 
     def test_edge_cases(self) -> None:
         # Test giving more resources than available
