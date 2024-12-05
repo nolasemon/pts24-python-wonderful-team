@@ -19,7 +19,7 @@ class PlayerBoardGameBoardFacade(InterfacePlayerBoardGameBoard,
     def give_effect(self, stuff: Iterable[Effect]) -> None:
         for item in stuff:
             if Effect.is_resource_or_food(item):
-                self.take_resourses([item])
+                self._player_board.resources_and_food.give_resources([item])
             elif item == Effect.BUILDING:
                 self._player_board.add_house()
             elif item == Effect.FIELD:
